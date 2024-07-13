@@ -1,5 +1,5 @@
 <template>
-  <div v-auto-animate class="min-h-screen flex flex-col">
+  <div v-auto-animate class="min-h-screen flex flex-col bg-gray-100">
     <!-- Header -->
     <layout-t-header @toggle-menu="toggleMenu" />
 
