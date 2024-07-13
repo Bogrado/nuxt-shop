@@ -14,5 +14,12 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
     '@formkit/auto-animate',
+    '@nuxtjs/google-fonts',
   ],
+  googleFonts: {
+    families: {
+      Montserrat: [400, 500, 700], // добавьте нужные вам веса шрифта
+    },
+    display: 'swap', // рекомендованная опция для улучшения производительности
+  },
 })
