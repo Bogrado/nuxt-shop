@@ -1,29 +1,40 @@
 <template>
-  <section
-    class="mb-12 px-4 py-12 text-center border border-gray-300 rounded-lg shadow-md bg-gray-200"
-  >
-    <h2 class="text-3xl font-bold mb-4 text-gray-900">{{ title }}</h2>
-    <div class="flex flex-wrap justify-center gap-4">
-      <pages-home-v-card
-        v-for="(product, index) in products"
-        :key="index"
-        :image="product.image"
-        :title="product.title"
-        :description="product.description"
-      />
+  <div>
+    <slot />
+    <div
+      class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4 bg-gray-200"
+    >
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
+      <div class="bg-gray-300 h-40" />
     </div>
-  </section>
+  </div>
 </template>
-
-<script setup>
-defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  products: {
-    type: Array,
-    required: true,
-  },
-})
-</script>
+<script setup lang="ts"></script>

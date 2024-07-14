@@ -1,11 +1,11 @@
 <template>
   <div>
-    <pages-v-page-header title="Главная страница" />
+    <pages-v-page-header title="Каталог" />
     <!-- Нижний блок с сеткой товаров -->
     <lazy-pages-home-v-products-section>
-      <template #default
-        ><h2 class="text-2xl font-bold p-4">Выгодные цены!</h2></template
-      >
+      <template #default>
+        <pages-catalog-v-toolbar />
+      </template>
     </lazy-pages-home-v-products-section>
   </div>
 </template>
@@ -15,9 +15,5 @@
 </script>
 
 <style scoped>
-/* Ограничение ширины выпадающего списка */
-select {
-  width: 100%;
-  display: block;
-}
+/* Добавьте любые дополнительные стили здесь */
 </style>
