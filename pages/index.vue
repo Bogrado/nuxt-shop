@@ -1,6 +1,7 @@
 <template>
   <div>
-    <pages-v-page-header title="Главная страница" />
+    <common-v-preloader />
+    <!--    <pages-v-page-header title="Главная страница" />-->
     <!-- Нижний блок с сеткой товаров -->
     <!--    <lazy-pages-home-v-products-section>-->
     <!--      <template #default-->
