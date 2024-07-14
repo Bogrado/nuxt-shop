@@ -16,8 +16,12 @@
         :key="link.to"
         class="relative flex flex-col items-center text-slate-500 cursor-pointer hover:text-white"
       >
-        <nuxt-link :to="link.to" class="flex flex-col items-center">
-          <div class="w-8 h-8 bg-gray-600" />
+        <nuxt-link
+          :to="link.to"
+          class="flex flex-col items-center"
+          active-class="text-white"
+        >
+          <component :is="link.icon" class="w-8 h-8 fill-current" />
           <span class="text-sm">{{ link.label }}</span>
           <span
             v-if="link.to === '/cart'"
@@ -38,6 +42,11 @@
 </template>
 
 <script setup>
+import VLike from '~/components/icons/VLike.vue'
+import VCart from '~/components/icons/VCart.vue'
+import VCatalog from '~/components/icons/VCatalog.vue'
+import VAccount from '~/components/icons/VAccount.vue'
+
 const isMenuOpen = ref(false)
 
 const toggleMenu = () => {
@@ -45,9 +54,9 @@ const toggleMenu = () => {
 }
 
 const links = ref([
-  { to: '/favorites', label: 'Избранное' },
-  { to: '/cart', label: 'Корзина' },
-  { to: '/catalog', label: 'Каталог' },
-  { to: '/login', label: 'Войти' },
+  { to: '/favorites', label: 'Избранное', icon: markRaw(VLike) },
+  { to: '/cart', label: 'Корзина', icon: markRaw(VCart) },
+  { to: '/home', label: 'Каталог', icon: markRaw(VCatalog) },
+  { to: '/login', label: 'Войти', icon: markRaw(VAccount) },
 ])
 </script>

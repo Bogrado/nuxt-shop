@@ -11,14 +11,15 @@
         <li
           v-for="link in links"
           :key="link.to"
-          class="relative flex flex-col items-center text-white cursor-pointer hover:text-gray-300"
+          class="relative flex flex-col items-center text-slate-500 cursor-pointer hover:text-white"
         >
           <nuxt-link
             :to="link.to"
             class="flex flex-col items-center"
+            active-class="text-white"
             @click="$emit('toggle-menu')"
           >
-            <div class="w-8 h-8 bg-gray-600" />
+            <component :is="link.icon" class="w-8 h-8 fill-current" />
             <span class="text-sm">{{ link.label }}</span>
             <span
               v-if="link.to === '/cart'"
