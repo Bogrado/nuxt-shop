@@ -2,39 +2,22 @@
   <div>
     <slot />
     <div
-      class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4 bg-gray-200"
+      class="w-full sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 p-4 bg-gray-200 flex flex-col items-center justify-center"
     >
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
-      <div class="bg-gray-300 h-40" />
+      <pages-home-v-card
+        v-for="product in products"
+        :key="product.id"
+        :product="product"
+      />
     </div>
   </div>
 </template>
-<script setup lang="ts"></script>
+
+<script setup>
+defineProps({
+  products: {
+    type: Array,
+    required: true,
+  },
+})
+</script>

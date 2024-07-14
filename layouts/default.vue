@@ -10,7 +10,7 @@
     />
 
     <!-- Main Content -->
-    <main class="flex-1 container mx-auto p-4">
+    <main v-auto-animate class="flex-1 container mx-auto p-4">
       <slot />
     </main>
 

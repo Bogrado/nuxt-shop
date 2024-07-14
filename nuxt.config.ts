@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
-    '@formkit/auto-animate',
+    '@formkit/auto-animate/nuxt',
     '@nuxtjs/google-fonts',
   ],
   googleFonts: {

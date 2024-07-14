@@ -2,7 +2,7 @@
   <header
     class="px-4 py-4 sm:px-10 sm:py-8 top-0 z-20 flex items-center justify-between p-3 border-b bg-gray-800 border-gray-200"
   >
-    <nuxt-link to="/" class="flex items-center gap-2 sm:gap-4 text-white">
+    <nuxt-link to="/home" class="flex items-center gap-2 sm:gap-4 text-white">
       <img src="/assets/static/logo.png" alt="Logo" class="w-8 sm:w-10" />
       <div>
         <h2 class="text-lg sm:text-xl font-bold uppercase">Otus Shop</h2>
@@ -34,9 +34,9 @@
       <li
         class="relative flex flex-col items-center text-slate-500 cursor-pointer hover:text-white"
       >
-        <nuxt-link to="/catalog" class="flex flex-col items-center">
+        <nuxt-link to="/home" class="flex flex-col items-center">
           <div class="w-8 h-8 bg-gray-600" />
-          <span class="text-sm">Каталог</span>
+          <span class="text-sm">Товары</span>
         </nuxt-link>
       </li>
       <li
@@ -51,11 +51,3 @@
     </ul>
   </header>
 </template>
-
-<script setup>
-// В данном случае логика не требуется
-</script>
-
-<style scoped>
-/* Ваши стили для компонента, если необходимы */
-</style>
