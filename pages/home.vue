@@ -8,14 +8,11 @@
     >
       обновить
     </button>
+    <pages-home-v-toolbar />
     <lazy-pages-home-v-products-section
       v-if="status === 'success'"
       :products="products"
-    >
-      <template #default>
-        <pages-home-v-toolbar />
-      </template>
-    </lazy-pages-home-v-products-section>
+    />
     <common-v-preloader v-if="status === 'pending'" />
   </div>
 </template>
@@ -23,6 +20,12 @@
 <script setup>
 const productsStore = useProductsStore()
 const products = computed(() => productsStore.getProducts)
+const searchQuery = computed(() => productsStore.getSearchQuery)
+const sortBy = computed(() => productsStore.getSortBy)
 
 const { status, refresh } = useAsyncData(() => productsStore.loadProducts())
+
+watch([searchQuery, sortBy], () => {
+  refresh()
+})
 </script>

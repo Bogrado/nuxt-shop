@@ -6,21 +6,63 @@
       class="flex items-center border border-gray-300 rounded-lg bg-white px-2 py-1 w-full sm:w-1/2 lg:w-1/3"
     >
       <input
+        :value="searchQuery"
         type="text"
         placeholder="Поиск..."
         class="focus:outline-none flex-grow"
+        @input="productsStore.setSearchQuery($event.target.value)"
       />
-      <button class="ml-2 text-gray-500 focus:outline-none">✕</button>
+      <button
+        class="ml-2 text-gray-500 focus:outline-none"
+        @click="clearSearch"
+      >
+        ✕
+      </button>
     </div>
     <div
       class="flex items-center border border-gray-300 rounded-lg bg-white px-2 py-1 w-full sm:w-1/2 lg:w-1/4"
     >
-      <label for="sort" class="mr-2">Сорт</label>
-      <select id="sort" class="focus:outline-none flex-grow w-full block">
-        <option value="default">По умолчанию</option>
-        <option value="price-asc">Цена: по возрастанию</option>
-        <option value="price-desc">Цена: по убыванию</option>
+      <label for="sort" class="mr-2">Сортировка</label>
+      <select
+        id="sort"
+        v-model="sort"
+        class="focus:outline-none flex-grow w-full block"
+      >
+        <option
+          v-for="filter in filters"
+          :key="filter.value"
+          :value="filter.value"
+        >
+          {{ filter.label }}
+        </option>
       </select>
     </div>
   </div>
 </template>
+
+<script setup>
+const productsStore = useProductsStore()
+const searchQuery = computed(() => productsStore.getSearchQuery)
+const search = ref('')
+const sort = ref('')
+
+const filters = [
+  { label: 'По умолчанию', value: '' },
+  { label: 'По названию', value: 'title' },
+  { label: 'Сначала недорогие', value: 'price' },
+  { label: 'Сначала дорогие', value: '-price' },
+  { label: 'По категории', value: 'category' },
+]
+
+watch(search, newSearch => {
+  productsStore.setSearchQuery(newSearch)
+})
+
+watch(sort, newSort => {
+  productsStore.setSortBy(newSort)
+})
+
+const clearSearch = () => {
+  search.value = ''
+}
+</script>
