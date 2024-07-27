@@ -4,3 +4,10 @@
     <nuxt-page />
   </nuxt-layout>
 </template>
+
+<style>
+html {
+  width: 100vw;
+  overflow-x: hidden;
+}
+</style>
