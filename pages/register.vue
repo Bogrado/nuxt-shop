@@ -11,9 +11,9 @@
 </template>
 
 <script setup lang="ts">
-// definePageMeta({
-//   middleware: 'authorized',
-// })
+definePageMeta({
+  middleware: 'authorized',
+})
 
 const { register, clearError, error } = useAuth()
 const loadingStore = useLoadingStore()

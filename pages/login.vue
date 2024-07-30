@@ -1,7 +1,7 @@
 <script setup lang="ts">
-// definePageMeta({
-//   middleware: 'authorized',
-// })
+definePageMeta({
+  middleware: 'authorized',
+})
 
 const { login, clearError, error, user } = useAuth()
 const loadingStore = useLoadingStore()

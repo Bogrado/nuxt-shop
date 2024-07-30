@@ -4,6 +4,7 @@ const ONE_WEEK = ONE_DAY * 7
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
+  plugins: ['~/plugins/auth.server.ts'],
   css: ['~/assets/css/main.css'],
   postcss: {
     plugins: {
@@ -18,6 +19,9 @@ export default defineNuxtConfig({
     '@formkit/auto-animate/nuxt',
     '@nuxtjs/google-fonts',
   ],
+  router: {
+    middleware: 'check-auth',
+  },
   googleFonts: {
     families: {
       Montserrat: [400, 500, 700], // добавьте нужные вам веса шрифта
