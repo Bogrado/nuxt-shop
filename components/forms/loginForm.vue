@@ -98,7 +98,7 @@ const handleSubmit = async () => {
           type="button"
           class="w-full mt-2 py-2 border border-gray-600 rounded text-gray-300 hover:bg-gray-700 transition"
           :disabled="loading"
-          @click="navigateTo('/register')"
+          @click="navigateTo('/auth_user/register')"
         >
           Зарегистрироваться
         </button>

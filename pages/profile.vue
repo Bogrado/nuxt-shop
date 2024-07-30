@@ -1,15 +1,11 @@
 <script setup lang="ts">
-definePageMeta({
-  middleware: 'check-auth',
-})
-
 const { logout, user } = useAuth()
 const loadingStore = useLoadingStore()
 const loading = computed(() => loadingStore.loading)
 
 const handleLogout = async () => {
   await logout()
-  navigateTo('/')
+  navigateTo('/home')
 }
 </script>
 

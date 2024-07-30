@@ -19,14 +19,14 @@ export default defineNuxtConfig({
     '@formkit/auto-animate/nuxt',
     '@nuxtjs/google-fonts',
   ],
-  router: {
-    middleware: 'check-auth',
-  },
   googleFonts: {
     families: {
       Montserrat: [400, 500, 700], // добавьте нужные вам веса шрифта
     },
     display: 'swap', // рекомендованная опция для улучшения производительности
+  },
+  router: {
+    middleware: ['check-auth'], // global middleware
   },
   runtimeConfig: {
     public: {

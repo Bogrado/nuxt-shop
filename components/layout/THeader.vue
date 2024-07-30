@@ -36,7 +36,7 @@
         class="flex flex-col items-center text-slate-500 cursor-pointer hover:text-white"
       >
         <nuxt-link
-          to="/login"
+          to="/auth_user/login"
           class="flex flex-col items-center"
           active-class="text-white"
         >
