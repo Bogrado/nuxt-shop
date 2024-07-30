@@ -5,6 +5,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   await fetchUser()
 
   if (protectedRoutes.some(route => to.path.startsWith(route)) && !user.value) {
-    return navigateTo('/login')
+    return navigateTo('/auth_user/login')
   }
 })

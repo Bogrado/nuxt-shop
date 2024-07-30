@@ -9,6 +9,32 @@
       </button>
       <ul class="flex flex-col items-center gap-4">
         <li
+          v-if="!user"
+          class="flex flex-col items-center text-slate-500 cursor-pointer hover:text-white"
+        >
+          <nuxt-link
+            to="/auth_user/login"
+            class="flex flex-col items-center"
+            active-class="text-white"
+          >
+            <v-account class="w-8 h-8 fill-current" />
+            <span class="text-sm">Войти</span>
+          </nuxt-link>
+        </li>
+        <li
+          v-if="user"
+          class="flex flex-col items-center text-slate-500 cursor-pointer hover:text-white"
+        >
+          <nuxt-link
+            to="/profile"
+            class="flex flex-col items-center"
+            active-class="text-white"
+          >
+            <v-account class="w-8 h-8 fill-current" />
+            <span class="text-sm">{{ user.nickName }}</span>
+          </nuxt-link>
+        </li>
+        <li
           v-for="link in links"
           :key="link.to"
           class="relative flex flex-col items-center text-slate-500 cursor-pointer hover:text-white"
@@ -35,6 +61,8 @@
 </template>
 
 <script setup>
+import VAccount from '~/components/icons/VAccount.vue'
+
 defineProps({
   isMenuOpen: {
     type: Boolean,
@@ -44,6 +72,11 @@ defineProps({
     type: Array,
     required: false,
     default: () => [],
+  },
+  user: {
+    type: Object,
+    required: false,
+    default: () => {},
   },
 })
 

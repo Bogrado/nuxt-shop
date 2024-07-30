@@ -60,6 +60,7 @@
     </ul>
     <button class="md:hidden text-white text-5xl" @click="toggleMenu">☰</button>
     <layout-t-mobile-drawer
+      :user="user"
       :is-menu-open="isMenuOpen"
       :links="links"
       @toggle-menu="toggleMenu"
