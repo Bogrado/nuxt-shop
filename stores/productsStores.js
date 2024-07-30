@@ -6,7 +6,6 @@ export const useProductsStore = defineStore('products', () => {
   const sortBy = ref('')
 
   const loadProducts = async () => {
-    console.log(1)
     try {
       const query = new URLSearchParams()
       if (searchQuery.value) {
@@ -25,11 +24,6 @@ export const useProductsStore = defineStore('products', () => {
       return []
     }
   }
-
-  // const setSearchQuery = query => debounce({
-  //   searchQuery.value = query
-  // }, 500)
-
   const setSearchQuery = debounce(query => {
     searchQuery.value = query
   }, 1000)
