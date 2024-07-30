@@ -20,10 +20,8 @@
       <p class="text-gray-500">{{ product.category }}</p>
       <div class="flex items-center mt-2">
         <span class="text-yellow-500">★</span>
-        <span class="ml-2 text-gray-700">{{ product.rating.rate }}</span>
-        <span class="ml-1 text-gray-500">
-          • {{ product.rating.count }} оценок
-        </span>
+        <span class="ml-2 text-gray-700">{{ product.rate }}</span>
+        <span class="ml-1 text-gray-500"> • {{ product.count }} оценок </span>
       </div>
       <button
         class="mt-4 w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600"
