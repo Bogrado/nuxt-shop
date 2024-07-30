@@ -14,8 +14,9 @@ export const useProductsStore = defineStore('products', () => {
       if (sortBy.value) {
         query.append('sortBy', sortBy.value)
       }
+      query.append('_select', 'id,title,price,category,image,rate,count')
       const response = await $fetch(
-        `https://6f8022cf47b3f024.mokky.dev/items?${query.toString()}`
+        `https://7af91f1883946b22.mokky.dev/items?${query.toString()}`
       )
       items.value = response
       return response
@@ -24,9 +25,10 @@ export const useProductsStore = defineStore('products', () => {
       return []
     }
   }
+
   const setSearchQuery = debounce(query => {
     searchQuery.value = query
-  }, 1000)
+  }, 600)
 
   const setSortBy = sort => {
     sortBy.value = sort

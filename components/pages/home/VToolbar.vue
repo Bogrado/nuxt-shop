@@ -52,6 +52,8 @@ const filters = [
   { label: 'Сначала недорогие', value: 'price' },
   { label: 'Сначала дорогие', value: '-price' },
   { label: 'По категории', value: 'category' },
+  { label: 'По рейтингу', value: '-rate' },
+  { label: 'По оценкам', value: '-count' },
 ]
 
 watch(search, newSearch => {
@@ -63,6 +65,6 @@ watch(sort, newSort => {
 })
 
 const clearSearch = () => {
-  search.value = ''
+  productsStore.setSearchQuery('')
 }
 </script>
