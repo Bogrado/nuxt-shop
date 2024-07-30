@@ -1,23 +1,27 @@
-<!--<script setup lang="ts">-->
-<!--import {useRegisterForm} from '@/composables/forms/useRegisterForm'-->
+<script setup lang="ts">
+import { useRegisterForm } from '@/composables/forms/useRegisterForm'
 
-<!--defineProps({-->
-<!--  loading: {-->
-<!--    type: Boolean,-->
-<!--    default: false-->
-<!--  }-->
-<!--})-->
+defineProps({
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+})
 
-<!--const emit = defineEmits(['handleSubmit'])-->
+const emit = defineEmits(['handleSubmit'])
 
-<!--const {state, error, v$} = useRegisterForm()-->
+const { state, error, v$ } = useRegisterForm()
 
-<!--const handleSubmit = async () => {-->
-<!--  if (await v$.value.$validate()) {-->
-<!--    emit('handleSubmit', {nickName: state.nickName, email: state.email, password: state.password})-->
-<!--  }-->
-<!--}-->
-<!--</script>-->
+const handleSubmit = async () => {
+  if (await v$.value.$validate()) {
+    emit('handleSubmit', {
+      nickName: state.nickName,
+      email: state.email,
+      password: state.password,
+    })
+  }
+}
+</script>
 
 <template>
   <form

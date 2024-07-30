@@ -31,6 +31,32 @@
           </span>
         </nuxt-link>
       </li>
+      <li
+        v-if="!user"
+        class="flex flex-col items-center text-slate-500 cursor-pointer hover:text-white"
+      >
+        <nuxt-link
+          to="/login"
+          class="flex flex-col items-center"
+          active-class="text-white"
+        >
+          <v-account class="w-8 h-8 fill-current" />
+          <span class="text-sm">Войти</span>
+        </nuxt-link>
+      </li>
+      <li
+        v-if="user"
+        class="flex flex-col items-center text-slate-500 cursor-pointer hover:text-white"
+      >
+        <nuxt-link
+          to="/profile"
+          class="flex flex-col items-center"
+          active-class="text-white"
+        >
+          <v-account class="w-8 h-8 fill-current" />
+          <span class="text-sm">{{ user.nickName }}</span>
+        </nuxt-link>
+      </li>
     </ul>
     <button class="md:hidden text-white text-5xl" @click="toggleMenu">☰</button>
     <layout-t-mobile-drawer
@@ -47,6 +73,8 @@ import VCart from '~/components/icons/VCart.vue'
 import VCatalog from '~/components/icons/VCatalog.vue'
 import VAccount from '~/components/icons/VAccount.vue'
 
+const { user } = useAuth()
+
 const isMenuOpen = ref(false)
 
 const toggleMenu = () => {
@@ -57,6 +85,5 @@ const links = ref([
   { to: '/favorites', label: 'Избранное', icon: markRaw(VLike) },
   { to: '/cart', label: 'Корзина', icon: markRaw(VCart) },
   { to: '/home', label: 'Каталог', icon: markRaw(VCatalog) },
-  { to: '/login', label: 'Войти', icon: markRaw(VAccount) },
 ])
 </script>
