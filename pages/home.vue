@@ -2,12 +2,6 @@
   <div v-auto-animate>
     <pages-v-page-header title="Домашняя страница" />
     <!-- Нижний блок с сеткой товаров -->
-    <button
-      class="mt-4 w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600"
-      @click="refresh"
-    >
-      обновить
-    </button>
     <pages-home-v-toolbar />
     <lazy-pages-home-v-products-section
       v-if="status === 'success'"
