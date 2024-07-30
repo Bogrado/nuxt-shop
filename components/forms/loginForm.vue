@@ -1,23 +1,23 @@
-<!--<script setup lang="ts">-->
-<!--import { useLoginForm } from '~/composables/forms/useLoginForm'-->
+<script setup lang="ts">
+import { useLoginForm } from '~/composables/forms/useLoginForm'
 
-<!--defineProps({-->
-<!--  loading: {-->
-<!--    type: Boolean,-->
-<!--    default: false,-->
-<!--  },-->
-<!--})-->
+defineProps({
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+})
 
-<!--const emit = defineEmits(['handleSubmit'])-->
+const emit = defineEmits(['handleSubmit'])
 
-<!--const { state, error, v$ } = useLoginForm()-->
+const { state, error, v$ } = useLoginForm()
 
-<!--const handleSubmit = async () => {-->
-<!--  if (await v$.value.$validate()) {-->
-<!--    emit('handleSubmit', state)-->
-<!--  }-->
-<!--}-->
-<!--</script>-->
+const handleSubmit = async () => {
+  if (await v$.value.$validate()) {
+    emit('handleSubmit', state)
+  }
+}
+</script>
 
 <template>
   <div>
