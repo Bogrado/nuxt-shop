@@ -9,7 +9,7 @@ const loading = computed(() => loadingStore.loading)
 const handleLogin = async (credentials: any) => {
   await login(credentials)
   if (!error.value && user.value) {
-    navigateTo('/home')
+    navigateTo('/catalog')
   }
 }
 

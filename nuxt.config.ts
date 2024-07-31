@@ -19,6 +19,9 @@ export default defineNuxtConfig({
     '@formkit/auto-animate/nuxt',
     '@nuxtjs/google-fonts',
   ],
+  devServer: {
+    port: 3001,
+  },
   googleFonts: {
     families: {
       Montserrat: [400, 500, 700], // добавьте нужные вам веса шрифта

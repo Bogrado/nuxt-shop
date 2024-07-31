@@ -85,6 +85,6 @@ const toggleMenu = () => {
 const links = ref([
   { to: '/favorites', label: 'Избранное', icon: markRaw(VLike) },
   { to: '/cart', label: 'Корзина', icon: markRaw(VCart) },
-  { to: '/home', label: 'Каталог', icon: markRaw(VCatalog) },
+  { to: '/catalog', label: 'Каталог', icon: markRaw(VCatalog) },
 ])
 </script>

@@ -1,5 +1,8 @@
 declare module '@nuxt/schema' {
   interface NuxtConfig {
+    devServer?: {
+      port?: number
+    }
     css?: string[]
     postcss: {
       plugins: {
