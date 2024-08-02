@@ -3,7 +3,10 @@
     v-auto-animate
     class="sticky top-0 px-4 py-4 sm:px-10 sm:py-8 z-20 flex items-center justify-between p-3 border-b bg-gray-800 border-gray-200"
   >
-    <nuxt-link to="/" class="flex items-center gap-2 sm:gap-4 text-white">
+    <nuxt-link
+      to="/catalog"
+      class="flex items-center gap-2 sm:gap-4 text-white"
+    >
       <img src="/assets/static/logo.png" alt="Logo" class="w-8 sm:w-10" />
       <div>
         <h2 class="text-lg sm:text-xl font-bold uppercase">Otus Shop</h2>
