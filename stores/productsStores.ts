@@ -1,23 +1,24 @@
 import debounce from 'lodash.debounce'
 
-export const useProductsStore = defineStore('products', () => {
-  const items = ref([])
-  const searchQuery = ref('')
-  const sortBy = ref('')
+type Product = Record<string, unknown>
 
-  const loadProducts = async () => {
+export const useProductsStore = defineStore('products', () => {
+  const items = ref<Product[]>([])
+  const searchQuery = ref<string>('')
+  const sortBy = ref<string>('')
+
+  const loadProducts = async (): Promise<Product[]> => {
     try {
-      const query = new URLSearchParams()
+      let query = '_select=id,title,price,category,image,rate,count'
       if (searchQuery.value) {
-        query.append('title', `*${searchQuery.value}*`)
+        query += `&title=*${searchQuery.value}*`
       }
       if (sortBy.value) {
-        query.append('sortBy', sortBy.value)
+        query += `&sortBy=${sortBy.value}`
       }
-      query.append('_select', 'id,title,price,category,image,rate,count')
-      const response = await $fetch(
-        `https://7af91f1883946b22.mokky.dev/items?${query.toString()}`
-      )
+      const response = await $fetch<Product[]>(`/api/data/items?${query}`, {
+        method: 'GET',
+      })
       items.value = response
       return response
     } catch (error) {
@@ -26,11 +27,11 @@ export const useProductsStore = defineStore('products', () => {
     }
   }
 
-  const setSearchQuery = debounce(query => {
+  const setSearchQuery = debounce((query: string) => {
     searchQuery.value = query
   }, 600)
 
-  const setSortBy = sort => {
+  const setSortBy = (sort: string) => {
     sortBy.value = sort
   }
 

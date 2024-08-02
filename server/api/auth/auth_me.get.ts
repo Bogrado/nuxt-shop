@@ -1,4 +1,4 @@
-import { handleFetchError } from '~/server/api/utils/handleFetchError'
+import { handleFetchError } from '~/utils/handleFetchError'
 
 export default defineEventHandler(async event => {
   const config = useRuntimeConfig()

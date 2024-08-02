@@ -5,7 +5,7 @@ const loading = computed(() => loadingStore.loading)
 
 const handleLogout = async () => {
   await logout()
-  navigateTo('/home')
+  navigateTo('/catalog')
 }
 </script>
 
