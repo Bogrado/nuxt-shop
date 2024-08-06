@@ -22,7 +22,7 @@ const loading = computed(() => loadingStore.loading)
 const handleRegister = async (event: any) => {
   await register(event)
   if (!error.value) {
-    navigateTo('/login')
+    navigateTo('/auth_user/login')
   }
 }
 

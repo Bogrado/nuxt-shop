@@ -1,8 +1,15 @@
 export const useAuthStore = defineStore('auth', () => {
   const config = useRuntimeConfig()
   const { setLoading } = useLoadingStore()
+  const { createCartForUser, createFavoritesForUser } = useUserSetup()
   const user = ref<object | null>(null)
   const error = ref<string | null>(null)
+
+  interface ApiResponse {
+    data: {
+      id: number
+    }
+  }
 
   const setUser = (userData: object | null) => {
     user.value = userData
@@ -15,10 +22,12 @@ export const useAuthStore = defineStore('auth', () => {
     clearError()
     setLoading(true)
     try {
-      await $fetch('/api/auth/register', {
+      const response = await $fetch<ApiResponse>('/api/auth/register', {
         method: 'POST',
         body: userData,
       })
+      await createCartForUser(response?.data.id)
+      await createFavoritesForUser(response?.data.id)
     } catch (err: unknown) {
       const e = err as {
         data?: { message?: string }
