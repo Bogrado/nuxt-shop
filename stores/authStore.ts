@@ -2,7 +2,7 @@ export const useAuthStore = defineStore('auth', () => {
   const config = useRuntimeConfig()
   const { setLoading } = useLoadingStore()
   const { createCartForUser, createFavoritesForUser } = useUserSetup()
-  const user = ref<object | null>(null)
+  const user = ref<User | null>(null)
   const error = ref<string | null>(null)
 
   interface ApiResponse {
@@ -11,13 +11,17 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const setUser = (userData: object | null) => {
+  interface User {
+    id: number
+  }
+
+  const setUser = (userData: User | null) => {
     user.value = userData
   }
 
   const getUser = computed(() => user.value)
   const clearError = () => (error.value = null)
-
+  const { loadUserCart } = useCartStore()
   const register = async (userData: Record<string, never>) => {
     clearError()
     setLoading(true)
@@ -50,7 +54,7 @@ export const useAuthStore = defineStore('auth', () => {
         method: 'POST',
         body: credentials,
       })
-      const data: object = await $fetch('/api/auth/auth_me', { method: 'GET' })
+      const data: User = await $fetch('/api/auth/auth_me', { method: 'GET' })
       setUser(data)
     } catch (err: unknown) {
       const e = err as {
@@ -83,11 +87,12 @@ export const useAuthStore = defineStore('auth', () => {
     const token = useCookie(config.public.cookieName)
     if (!user.value && token.value) {
       try {
-        const data: object = await $fetch('/api/auth/auth_me', {
+        const data: User = await $fetch('/api/auth/auth_me', {
           method: 'GET',
           headers: useRequestHeaders(['cookie']) as HeadersInit,
         })
         setUser(data)
+        await loadUserCart()
       } catch (e) {
         await logout()
       } finally {
