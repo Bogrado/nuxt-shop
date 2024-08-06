@@ -30,7 +30,7 @@
             v-if="link.to === '/cart'"
             class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center"
           >
-            0
+            {{ totalItems || 0 }}
           </span>
         </nuxt-link>
       </li>
@@ -78,12 +78,13 @@ import VCatalog from '~/components/icons/VCatalog.vue'
 import VAccount from '~/components/icons/VAccount.vue'
 
 const { user } = useAuth()
-
+const cartStore = useCartStore()
 const isMenuOpen = ref(false)
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
+const totalItems = computed(() => cartStore.totalItems)
 
 const links = ref([
   { to: '/favorites', label: 'Избранное', icon: markRaw(VLike) },

@@ -1,3 +1,5 @@
+import type { ComputedRef } from 'vue'
+
 export const useCartStore = defineStore('cart', () => {
   const loadingStore = useLoadingStore()
   const authStore = useAuthStore()
@@ -114,7 +116,7 @@ export const useCartStore = defineStore('cart', () => {
   // }
   //
   // const itemQuantity = computed(() => (itemId) => state.items.filter((item) => item.id === itemId).length)
-  // const totalItems = computed(() => state.items.length)
+  const totalItems: ComputedRef<number> = computed(() => state.items.length)
   // const itemIds = computed(() => state.items.map((item) => item.id))
   // const products = computed(() => {
   //   const uniqueProducts = {}
@@ -141,6 +143,8 @@ export const useCartStore = defineStore('cart', () => {
   return {
     state,
     addItem,
+    loadUserCart,
+    totalItems,
     // removeItem,
     // removeAll,
     // clearCart,
@@ -150,7 +154,6 @@ export const useCartStore = defineStore('cart', () => {
     // itemQuantity,
     // products,
     // totalPrice,
-    loadUserCart,
     // syncCartWithServer,
     // mergeAnonCart,
   }
