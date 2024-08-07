@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { CartItem } from '~/types'
+import type { Item } from '~/types'
 
 const props = defineProps<{
-  product: CartItem
+  product: Item
 }>()
 
 const emit = defineEmits(['ClickDecrease', 'ClickIncrease', 'ClickDelete'])

@@ -63,6 +63,7 @@
     </ul>
     <button class="md:hidden text-white text-5xl" @click="toggleMenu">☰</button>
     <layout-t-mobile-drawer
+      :total-items="totalItems"
       :user="user"
       :is-menu-open="isMenuOpen"
       :links="links"
@@ -71,7 +72,7 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import VLike from '~/components/icons/VLike.vue'
 import VCart from '~/components/icons/VCart.vue'
 import VCatalog from '~/components/icons/VCatalog.vue'

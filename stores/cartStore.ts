@@ -1,13 +1,13 @@
 // stores/cartStore.ts
 import type { ComputedRef } from 'vue'
-import type { StateItems, CartData } from '~/types'
+import type { StateItems, CartData, Item } from '~/types'
 
 export const useCartStore = defineStore('cart', () => {
   const loadingStore = useLoadingStore()
   const authStore = useAuthStore()
   const user = computed(() => authStore.getUser)
   const state = reactive({
-    items: [] as StateItems[],
+    items: [] as Item[],
     loading: false,
   })
 
@@ -53,7 +53,16 @@ export const useCartStore = defineStore('cart', () => {
   // }
   //
   const addItem = async (itemId: number) => {
-    state.items.push({ id: itemId })
+    // в принципе.... да все-равно заменятся, пусть будут пустые
+    state.items.push({
+      category: '',
+      count: 0,
+      image: 'https://placehold.co/600x400',
+      price: 0,
+      rate: 0,
+      title: '',
+      id: itemId,
+    })
     if (user?.value?.id) {
       console.log('additem')
       await syncCartWithServer()

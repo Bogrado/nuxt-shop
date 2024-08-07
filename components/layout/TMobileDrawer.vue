@@ -51,7 +51,7 @@
               v-if="link.to === '/cart'"
               class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center"
             >
-              0
+              {{ totalItems }}
             </span>
           </nuxt-link>
         </li>
@@ -77,6 +77,11 @@ defineProps({
     type: Object,
     required: false,
     default: () => {},
+  },
+  totalItems: {
+    type: Number,
+    required: false,
+    default: 0,
   },
 })
 

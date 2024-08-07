@@ -40,7 +40,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const productsStore = useProductsStore()
 const searchQuery = computed(() => productsStore.getSearchQuery)
 const search = ref('')

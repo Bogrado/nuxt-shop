@@ -13,12 +13,11 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
-  products: {
-    type: Array,
-    required: true,
-  },
-})
+import type { Item } from '~/types'
+
+defineProps<{
+  products: Item[]
+}>()
 
 const cartStore = useCartStore()
 </script>

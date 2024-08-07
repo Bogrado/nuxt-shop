@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const productsStore = useProductsStore()
 const products = computed(() => productsStore.getProducts)
 const searchQuery = computed(() => productsStore.getSearchQuery)

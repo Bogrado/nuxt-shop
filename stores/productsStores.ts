@@ -1,13 +1,12 @@
 import debounce from 'lodash.debounce'
-
-type Product = Record<string, unknown>
+import type { Item } from '~/types'
 
 export const useProductsStore = defineStore('products', () => {
-  const items = ref<Product[]>([])
+  const items = ref<Item[]>([])
   const searchQuery = ref<string>('')
   const sortBy = ref<string>('')
 
-  const loadProducts = async (): Promise<Product[]> => {
+  const loadProducts = async (): Promise<Item[]> => {
     try {
       let query = '_select=id,title,price,category,image,rate,count'
       if (searchQuery.value) {
@@ -16,7 +15,7 @@ export const useProductsStore = defineStore('products', () => {
       if (sortBy.value) {
         query += `&sortBy=${sortBy.value}`
       }
-      const response = await $fetch<Product[]>(`/api/data/items?${query}`, {
+      const response = await $fetch<Item[]>(`/api/data/items?${query}`, {
         method: 'GET',
       })
       items.value = response

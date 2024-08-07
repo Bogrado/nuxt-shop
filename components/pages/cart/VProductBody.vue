@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { CartItem } from '~/types.js'
+import type { Item } from '~/types.js'
 
 defineProps<{
-  product: CartItem
+  product: Item
 }>()
 </script>
 

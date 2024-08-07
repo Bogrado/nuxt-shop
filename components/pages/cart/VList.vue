@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { CartItem } from '~/types'
+import type { Item } from '~/types'
 defineProps<{
-  products: CartItem[]
+  products: Item[]
 }>()
 
 const cartStore = useCartStore()

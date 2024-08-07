@@ -10,7 +10,7 @@ export interface CartData {
   id: number
 }
 
-export interface CartItem {
+export interface Item {
   id: number
   title: string
   price: number
