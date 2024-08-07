@@ -23,23 +23,44 @@
         <span class="ml-2 text-gray-700">{{ product.rate }}</span>
         <span class="ml-1 text-gray-500"> • {{ product.count }} оценок </span>
       </div>
-      <button
-        class="mt-4 w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600"
-        @click="cartStore.addItem(product.id)"
-      >
-        Добавить в корзину
-      </button>
+      <div v-auto-animate>
+        <div
+          v-if="isInCart"
+          class="border-2 border-blue-600 text-blue-600 py-0.5 px-6 rounded-2xl hover:border-blue-900 hover:text-blue-900 hover:bg-blue-100 transition duration-300 min-w-40 flex justify-center items-center"
+        >
+          <common-v-quantity-manager
+            :quantity="quantity"
+            @on-click-decrease="handleRemoveFromCart"
+            @on-click-increase="handleAddToCart"
+          />
+        </div>
+        <button
+          v-else
+          class="border-2 border-blue-600 text-blue-600 py-1.5 px-6 rounded-2xl hover:border-blue-900 hover:text-blue-900 hover:bg-blue-100 transition duration-300 active:bg-green-700 w-full flex justify-center items-center"
+          @click="handleAddToCart"
+        >
+          Купить
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   product: {
     type: Object,
     required: true,
   },
 })
+const emit = defineEmits(['onAddToCart', 'onRemoveFromCart'])
 
 const cartStore = useCartStore()
+const isInCart = computed(
+  () => cartStore.itemIds.includes(props.product.id) || false
+)
+const quantity = computed(() => cartStore.itemQuantity(props.product.id) || 0)
+
+const handleAddToCart = () => emit('onAddToCart', props.product.id)
+const handleRemoveFromCart = () => emit('onRemoveFromCart', props.product.id)
 </script>

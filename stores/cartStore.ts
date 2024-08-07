@@ -1,25 +1,20 @@
-// stores\cartStore.ts
+// stores/cartStore.ts
 import type { ComputedRef } from 'vue'
+import type { StateItems, CartData } from '~/types'
 
 export const useCartStore = defineStore('cart', () => {
   const loadingStore = useLoadingStore()
   const authStore = useAuthStore()
   const user = computed(() => authStore.getUser)
   const state = reactive({
-    items: [],
+    items: [] as StateItems[],
     loading: false,
   })
-
-  interface Cart {
-    user_id: number
-    items: []
-    id: number
-  }
 
   const loadUserCart = async () => {
     if (user?.value?.id) {
       try {
-        const cart: Cart = await $fetch(`/api/cart/user_items`, {
+        const cart: CartData = await $fetch(`/api/cart/user_items`, {
           params: { user_id: user.value.id },
         })
         state.items = cart.items || []
@@ -68,46 +63,52 @@ export const useCartStore = defineStore('cart', () => {
     // }
   }
   //
-  // const removeItem = async (itemId: number) => {
-  //   const index = state.items.findIndex(item => item.id === itemId)
-  //   if (index !== -1) {
-  //     state.items.splice(index, 1)
-  //     if (authStore.userId) {
-  //       await syncCartWithServer()
-  //     } else {
-  //       syncLocalStorage()
-  //     }
-  //   }
-  // }
+  const removeItem = async (itemId: number) => {
+    const index = state.items.findIndex(item => item.id === itemId)
+    if (index !== -1) {
+      state.items.splice(index, 1)
+      if (user?.value?.id) {
+        await syncCartWithServer()
+      }
+      // else {
+      //   syncLocalStorage()
+      // }
+    }
+  }
   //
-  // const removeAll = async (itemId) => {
-  //   state.items = state.items.filter((item) => item.id !== itemId)
-  //   if (authStore.userId) {
-  //     await syncCartWithServer()
-  //   } else {
-  //     syncLocalStorage()
-  //   }
-  // }
+  const removeAll = async (itemId: number) => {
+    state.items = state.items.filter(item => item.id !== itemId)
+    if (user?.value?.id) {
+      await syncCartWithServer()
+    }
+    // else {
+    //   syncLocalStorage()
+    // }
+  }
   //
-  // const clearCart = async () => {
-  //   state.items = []
-  //   if (authStore.userId) {
-  //     await syncCartWithServer()
-  //   } else {
-  //     localStorage.removeItem('cartItems')
-  //   }
-  // }
+  const clearCart = async () => {
+    state.items = []
+    if (user?.value?.id) {
+      await syncCartWithServer()
+    }
+    // else {
+    //   localStorage.removeItem('cartItems')
+    // }
+  }
   //
   const loadCartProducts = async () => {
     try {
       if (itemIds.value.length > 0) {
-        const fetchedProducts = await $fetch('/api/data/items', {
-          method: 'GET',
-          params: {
-            id: itemIds.value,
-            _select: '-description',
-          },
-        })
+        const fetchedProducts: StateItems[] = await $fetch<StateItems[]>(
+          '/api/data/items',
+          {
+            method: 'GET',
+            params: {
+              id: itemIds.value,
+              _select: '-description',
+            },
+          }
+        )
         state.items = fetchedProducts.flatMap(product => {
           const itemCount = itemIds.value.filter(id => id === product.id).length
           return Array(itemCount).fill(product)
@@ -122,9 +123,12 @@ export const useCartStore = defineStore('cart', () => {
     }
   }
   //
-  // const itemQuantity = computed(() => (itemId) => state.items.filter((item) => item.id === itemId).length)
+  const itemQuantity = computed(
+    () => (itemId: number) =>
+      state.items.filter(item => item.id === itemId).length
+  )
   const products = computed(() => {
-    const uniqueProducts = {}
+    const uniqueProducts: { [key: number]: StateItems } = {}
     state.items.forEach(item => {
       uniqueProducts[item.id] = item
     })
@@ -162,13 +166,16 @@ export const useCartStore = defineStore('cart', () => {
     itemsWithIds,
     loadCartProducts,
     products,
+    itemQuantity,
+    removeItem,
+    removeAll,
+    clearCart,
+    itemIds,
     // removeItem,
-    // removeAll,
+
     // clearCart,
     // totalItems,
-    // itemIds,
     // loadCartProducts,
-    // itemQuantity,
     // products,
     // totalPrice,
     // syncCartWithServer,

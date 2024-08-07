@@ -6,15 +6,19 @@
       v-for="product in products"
       :key="product.id"
       :product="product"
+      @on-add-to-cart="cartStore.addItem($event)"
+      @on-remove-from-cart="cartStore.removeItem($event)"
     />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineProps({
   products: {
     type: Array,
     required: true,
   },
 })
+
+const cartStore = useCartStore()
 </script>
