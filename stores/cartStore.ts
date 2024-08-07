@@ -61,12 +61,12 @@ export const useCartStore = defineStore('cart', () => {
     state.loadingItems[itemId] = true
     try {
       state.items.push({
-        category: '',
+        category: 'loading...',
         count: 0,
         image: 'https://placehold.co/600x400',
         price: 0,
         rate: 0,
-        title: '',
+        title: 'loading...',
         id: itemId,
       })
       if (user?.value?.id) {
