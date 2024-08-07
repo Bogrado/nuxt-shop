@@ -5,7 +5,7 @@ definePageMeta({
 
 const { login, clearError, error, user } = useAuth()
 const loadingStore = useLoadingStore()
-const loading = computed(() => loadingStore.loading)
+const cartLoading = computed(() => loadingStore.loading)
 const handleLogin = async (credentials: any) => {
   await login(credentials)
   if (!error.value && user.value) {

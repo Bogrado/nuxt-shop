@@ -1,17 +1,18 @@
 // stores/cartStore.ts
 import type { ComputedRef } from 'vue'
-import type { StateItems, CartData, Item } from '~/types'
+import type { CartData, Item } from '~/types'
 
 export const useCartStore = defineStore('cart', () => {
-  const loadingStore = useLoadingStore()
   const authStore = useAuthStore()
   const user = computed(() => authStore.getUser)
   const state = reactive({
     items: [] as Item[],
-    loading: false,
+    cartLoading: false,
+    loadingItems: {} as { [key: number]: boolean }, // состояние загрузки для каждого товара
   })
 
   const loadUserCart = async () => {
+    state.cartLoading = true
     if (user?.value?.id) {
       try {
         const cart: CartData = await $fetch(`/api/cart/user_items`, {
@@ -19,9 +20,9 @@ export const useCartStore = defineStore('cart', () => {
         })
         state.items = cart.items || []
       } catch (error) {
-        console.error('Error loading user cart:', error)
+        console.error('Error cartLoading user cart:', error)
       } finally {
-        loadingStore.setLoading(false)
+        state.cartLoading = false
       }
     } else {
       console.error('User is not authenticated')
@@ -29,6 +30,7 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   const syncCartWithServer = async () => {
+    state.cartLoading = true
     if (user?.value?.id) {
       try {
         await $fetch(`/api/cart/user_items`, {
@@ -37,6 +39,8 @@ export const useCartStore = defineStore('cart', () => {
         })
       } catch (error) {
         console.error('Error syncing cart with server:', error)
+      } finally {
+        state.cartLoading = false
       }
     }
   }
@@ -54,37 +58,51 @@ export const useCartStore = defineStore('cart', () => {
   //
   const addItem = async (itemId: number) => {
     // в принципе.... да все-равно заменятся, пусть будут пустые
-    state.items.push({
-      category: '',
-      count: 0,
-      image: 'https://placehold.co/600x400',
-      price: 0,
-      rate: 0,
-      title: '',
-      id: itemId,
-    })
-    if (user?.value?.id) {
-      console.log('additem')
-      await syncCartWithServer()
+    state.loadingItems[itemId] = true
+    try {
+      state.items.push({
+        category: '',
+        count: 0,
+        image: 'https://placehold.co/600x400',
+        price: 0,
+        rate: 0,
+        title: '',
+        id: itemId,
+      })
+      if (user?.value?.id) {
+        console.log('additem')
+        await syncCartWithServer()
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      state.loadingItems[itemId] = false
     }
+
     // else {
     //   syncLocalStorage()
     // }
   }
   //
   const removeItem = async (itemId: number) => {
-    const index = state.items.findIndex(item => item.id === itemId)
-    if (index !== -1) {
-      state.items.splice(index, 1)
-      if (user?.value?.id) {
-        await syncCartWithServer()
+    state.loadingItems[itemId] = true
+    try {
+      const index = state.items.findIndex(item => item.id === itemId)
+      if (index !== -1) {
+        state.items.splice(index, 1)
+        if (user?.value?.id) {
+          await syncCartWithServer()
+        }
+        // else {
+        //   syncLocalStorage()
+        // }
       }
-      // else {
-      //   syncLocalStorage()
-      // }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      state.loadingItems[itemId] = false
     }
   }
-  //
   const removeAll = async (itemId: number) => {
     state.items = state.items.filter(item => item.id !== itemId)
     if (user?.value?.id) {
@@ -106,9 +124,10 @@ export const useCartStore = defineStore('cart', () => {
   }
   //
   const loadCartProducts = async () => {
+    state.cartLoading = true
     try {
       if (itemIds.value.length > 0) {
-        const fetchedProducts: StateItems[] = await $fetch<StateItems[]>(
+        const fetchedProducts: Item[] = await $fetch<Item[]>(
           '/api/data/items',
           {
             method: 'GET',
@@ -128,7 +147,7 @@ export const useCartStore = defineStore('cart', () => {
     } catch (error) {
       console.error('Failed to load cart products:', error)
     } finally {
-      /* empty */
+      state.cartLoading = false
     }
   }
   //
@@ -137,7 +156,7 @@ export const useCartStore = defineStore('cart', () => {
       state.items.filter(item => item.id === itemId).length
   )
   const products = computed(() => {
-    const uniqueProducts: { [key: number]: StateItems } = {}
+    const uniqueProducts: { [key: number]: Item } = {}
     state.items.forEach(item => {
       uniqueProducts[item.id] = item
     })
@@ -156,7 +175,10 @@ export const useCartStore = defineStore('cart', () => {
   const itemsWithIds = computed(() => {
     return state.items.map((item: { id: number }) => ({ id: item.id })) // для передачи в боди объектов из state в виде {id: number}
   })
-
+  const cartLoading = computed(() => state.cartLoading)
+  const itemLoading = computed(() => (itemId: number) => {
+    return state.loadingItems[itemId] || false
+  })
   watch(totalItems, async () => {
     if (user?.value?.id) {
       await syncCartWithServer()
@@ -180,6 +202,8 @@ export const useCartStore = defineStore('cart', () => {
     removeAll,
     clearCart,
     itemIds,
+    cartLoading,
+    itemLoading,
     // removeItem,
 
     // clearCart,
