@@ -11,9 +11,8 @@ const products = computed(() => cartStore.products)
       Ваша корзина пуста.
     </div>
     <div v-auto-animate>
-      <v-preloader class="w-32 h-32" v-if="cartStore.cartLoading" />
+      <!--      <v-preloader class="w-32 h-32" v-if="cartStore.cartLoading" />-->
       <div
-        v-else
         class="max-w-screen-2xl mx-auto flex flex-col lg:flex-row lg:space-x-8"
       >
         <!-- Левая колонка - товары в корзине -->
