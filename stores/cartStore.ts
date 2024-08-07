@@ -1,3 +1,4 @@
+// stores\cartStore.ts
 import type { ComputedRef } from 'vue'
 
 export const useCartStore = defineStore('cart', () => {
@@ -37,7 +38,7 @@ export const useCartStore = defineStore('cart', () => {
       try {
         await $fetch(`/api/cart/user_items`, {
           method: 'PATCH',
-          body: { user_id: user.value.id, items: state.items },
+          body: { user_id: user.value.id, items: itemsWithIds.value },
         })
       } catch (error) {
         console.error('Error syncing cart with server:', error)
@@ -59,6 +60,7 @@ export const useCartStore = defineStore('cart', () => {
   const addItem = async (itemId: number) => {
     state.items.push({ id: itemId })
     if (user?.value?.id) {
+      console.log('additem')
       await syncCartWithServer()
     }
     // else {
@@ -96,55 +98,70 @@ export const useCartStore = defineStore('cart', () => {
   //   }
   // }
   //
-  // const loadCartProducts = async () => {
-  //   loadingStore.setLoading(true)
-  //   try {
-  //     if (itemIds.value.length > 0) {
-  //       const fetchedProducts = await getData('items', { params: { id: itemIds.value, _select: '-description' } })
-  //       state.items = fetchedProducts.flatMap((product) => {
-  //         const itemCount = itemIds.value.filter((id) => id === product.id).length
-  //         return Array(itemCount).fill(product)
-  //       })
-  //       return
-  //     }
-  //     state.items = []
-  //   } catch (error) {
-  //     console.error('Failed to load cart products:', error)
-  //   } finally {
-  //     loadingStore.setLoading(false)
-  //   }
-  // }
+  const loadCartProducts = async () => {
+    try {
+      if (itemIds.value.length > 0) {
+        const fetchedProducts = await $fetch('/api/data/items', {
+          method: 'GET',
+          params: {
+            id: itemIds.value,
+            _select: '-description',
+          },
+        })
+        state.items = fetchedProducts.flatMap(product => {
+          const itemCount = itemIds.value.filter(id => id === product.id).length
+          return Array(itemCount).fill(product)
+        })
+        return
+      }
+      state.items = []
+    } catch (error) {
+      console.error('Failed to load cart products:', error)
+    } finally {
+      /* empty */
+    }
+  }
   //
   // const itemQuantity = computed(() => (itemId) => state.items.filter((item) => item.id === itemId).length)
-  const totalItems: ComputedRef<number> = computed(() => state.items.length)
-  // const itemIds = computed(() => state.items.map((item) => item.id))
-  // const products = computed(() => {
-  //   const uniqueProducts = {}
-  //   state.items.forEach((item) => {
-  //     uniqueProducts[item.id] = item
-  //   })
-  //   return Object.values(uniqueProducts)
-  // })
+  const products = computed(() => {
+    const uniqueProducts = {}
+    state.items.forEach(item => {
+      uniqueProducts[item.id] = item
+    })
+    return Object.values(uniqueProducts)
+  })
   //
   // const totalPrice = computed(() => {
   //   const total = state.items.reduce((total, item) => total + item.price, 0)
   //   return Number(total.toFixed(2))
   // })
   //
-  // watch(totalItems, async () => {
-  //   if (authStore.userId) {
-  //     await syncCartWithServer()
-  //   } else {
-  //     console.log(1)
-  //     syncLocalStorage()
-  //   }
-  // })
+  const itemIds = computed(() =>
+    state.items.map((item: { id: number }) => item.id)
+  )
+  const totalItems: ComputedRef<number> = computed(() => state.items.length) // кол-во товаров в корзине
+  const itemsWithIds = computed(() => {
+    return state.items.map((item: { id: number }) => ({ id: item.id })) // для передачи в боди объектов из state в виде {id: number}
+  })
 
+  watch(totalItems, async () => {
+    if (user?.value?.id) {
+      await syncCartWithServer()
+      await loadCartProducts()
+    }
+    // else {
+    //   console.log(1)
+    //   syncLocalStorage()
+    // }
+  })
   return {
     state,
     addItem,
     loadUserCart,
     totalItems,
+    itemsWithIds,
+    loadCartProducts,
+    products,
     // removeItem,
     // removeAll,
     // clearCart,

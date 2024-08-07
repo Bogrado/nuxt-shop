@@ -7,7 +7,7 @@ const cartStore = useCartStore()
   <div>
     <!-- Заголовок страницы -->
     <pages-v-page-header title="Корзина" />
-    <button class="border border-red-500" @click="cartStore.loadUserCart()">
+    <button class="border border-red-500" @click="cartStore.loadCartProducts()">
       click
     </button>
   </div>
