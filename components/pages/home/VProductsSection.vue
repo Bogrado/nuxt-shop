@@ -8,6 +8,7 @@
       :product="product"
       @on-add-to-cart="cartStore.addItem($event)"
       @on-remove-from-cart="cartStore.removeItem($event)"
+      @on-favorite-click="favoriteStore.toggleFavorite($event)"
     />
   </div>
 </template>
@@ -20,4 +21,5 @@ defineProps<{
 }>()
 
 const cartStore = useCartStore()
+const favoriteStore = useFavoriteStore()
 </script>

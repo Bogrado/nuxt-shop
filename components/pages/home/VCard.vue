@@ -8,10 +8,11 @@
       />
       <div
         class="absolute top-2 right-2 flex items-center justify-center bg-white p-1 rounded-md shadow hover:shadow-md"
+        @click="handleAddToFavorite"
       >
         <icons-v-like
           class="w-6 h-6 hover:fill-gray-700"
-          :class="{ 'fill-red-500': isFavorite }"
+          :class="{ 'fill-red-700': isFavorite }"
         /><!-- Сердечко или пустой квадрат -->
       </div>
     </div>
@@ -62,18 +63,19 @@ const props = defineProps({
     required: true,
   },
 })
-const emit = defineEmits(['onAddToCart', 'onRemoveFromCart'])
+const emit = defineEmits(['onAddToCart', 'onRemoveFromCart', 'onFavoriteClick'])
 
 const favoriteStore = useFavoriteStore()
 const cartStore = useCartStore()
 const isInCart = computed(
   () => cartStore.itemIds.includes(props.product.id) || false
 )
-const isFavorite = computed(
-  () => favoriteStore.state.items.includes(props.product.id) || false
+const isFavorite = computed(() =>
+  favoriteStore.products.some(product => product.id == props.product.id)
 )
 const quantity = computed(() => cartStore.itemQuantity(props.product.id) || 0)
 const loading = computed(() => cartStore.itemLoading(props.product.id))
 const handleAddToCart = () => emit('onAddToCart', props.product.id)
 const handleRemoveFromCart = () => emit('onRemoveFromCart', props.product.id)
+const handleAddToFavorite = () => emit('onFavoriteClick', props.product.id)
 </script>
