@@ -7,9 +7,12 @@
         class="w-full h-64 object-contain rounded"
       />
       <div
-        class="absolute top-2 right-2 w-6 h-6 bg-gray-200 rounded flex items-center justify-center"
+        class="absolute top-2 right-2 flex items-center justify-center bg-white p-1 rounded-md shadow hover:shadow-md"
       >
-        <!-- Сердечко или пустой квадрат -->
+        <icons-v-like
+          class="w-6 h-6 hover:fill-gray-700"
+          :class="{ 'fill-red-500': isFavorite }"
+        /><!-- Сердечко или пустой квадрат -->
       </div>
     </div>
     <div class="mt-4">
@@ -61,9 +64,13 @@ const props = defineProps({
 })
 const emit = defineEmits(['onAddToCart', 'onRemoveFromCart'])
 
+const favoriteStore = useFavoriteStore()
 const cartStore = useCartStore()
 const isInCart = computed(
   () => cartStore.itemIds.includes(props.product.id) || false
+)
+const isFavorite = computed(
+  () => favoriteStore.state.items.includes(props.product.id) || false
 )
 const quantity = computed(() => cartStore.itemQuantity(props.product.id) || 0)
 const loading = computed(() => cartStore.itemLoading(props.product.id))

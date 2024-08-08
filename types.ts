@@ -10,6 +10,12 @@ export interface CartData {
   id: number
 }
 
+export interface FavoritesData {
+  user_id: number
+  items: []
+  id: number
+}
+
 export interface Item {
   id: number
   title: string
