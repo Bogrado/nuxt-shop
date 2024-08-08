@@ -18,7 +18,7 @@ export const useCartStore = defineStore('cart', () => {
         const cart: CartData = await $fetch(`/api/cart/user_items`, {
           params: { user_id: user.value.id },
         })
-        state.items = cart.items || []
+        state.items = [...state.items, ...cart.items]
       } catch (error) {
         console.error('Error cartLoading user cart:', error)
       } finally {
@@ -44,18 +44,6 @@ export const useCartStore = defineStore('cart', () => {
       }
     }
   }
-  //
-  // const mergeAnonCart = async () => {
-  //   const anonCart = JSON.parse(localStorage.getItem('cartItems')) || []
-  //   state.items = [...state.items, ...anonCart]
-  //   localStorage.removeItem('cartItems')
-  //   await syncCartWithServer()
-  // }
-  //
-  // const syncLocalStorage = () => {
-  //   localStorage.setItem('cartItems', JSON.stringify(state.items))
-  // }
-  //
   const addItem = async (itemId: number) => {
     // в принципе.... да все-равно заменятся, пусть будут пустые
     state.loadingItems[itemId] = true
@@ -78,12 +66,7 @@ export const useCartStore = defineStore('cart', () => {
     } finally {
       state.loadingItems[itemId] = false
     }
-
-    // else {
-    //   syncLocalStorage()
-    // }
   }
-  //
   const removeItem = async (itemId: number) => {
     state.loadingItems[itemId] = true
     try {
@@ -93,9 +76,6 @@ export const useCartStore = defineStore('cart', () => {
         if (user?.value?.id) {
           await syncCartWithServer()
         }
-        // else {
-        //   syncLocalStorage()
-        // }
       }
     } catch (e) {
       console.error(e)
@@ -108,21 +88,13 @@ export const useCartStore = defineStore('cart', () => {
     if (user?.value?.id) {
       await syncCartWithServer()
     }
-    // else {
-    //   syncLocalStorage()
-    // }
   }
-  //
   const clearCart = async () => {
     state.items = []
     if (user?.value?.id) {
       await syncCartWithServer()
     }
-    // else {
-    //   localStorage.removeItem('cartItems')
-    // }
   }
-  //
   const loadCartProducts = async () => {
     state.cartLoading = true
     try {
@@ -182,12 +154,8 @@ export const useCartStore = defineStore('cart', () => {
   watch(totalItems, async () => {
     if (user?.value?.id) {
       await syncCartWithServer()
-      await loadCartProducts()
     }
-    // else {
-    //   console.log(1)
-    //   syncLocalStorage()
-    // }
+    await loadCartProducts()
   })
   return {
     state,
@@ -204,14 +172,5 @@ export const useCartStore = defineStore('cart', () => {
     itemIds,
     cartLoading,
     itemLoading,
-    // removeItem,
-
-    // clearCart,
-    // totalItems,
-    // loadCartProducts,
-    // products,
-    // totalPrice,
-    // syncCartWithServer,
-    // mergeAnonCart,
   }
 })

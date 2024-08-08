@@ -17,7 +17,7 @@ definePageMeta({
 
 const { register, clearError, error } = useAuth()
 const loadingStore = useLoadingStore()
-const cartLoading = computed(() => loadingStore.loading)
+const loading = computed(() => loadingStore.loading)
 
 const handleRegister = async (event: any) => {
   await register(event)

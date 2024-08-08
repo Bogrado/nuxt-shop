@@ -2,6 +2,7 @@ export const useAuthStore = defineStore('auth', () => {
   const config = useRuntimeConfig()
   const { setLoading } = useLoadingStore()
   const { createCartForUser, createFavoritesForUser } = useUserSetup()
+  const { loadUserCart, clearCart } = useCartStore()
   const user = ref<User | null>(null)
   const error = ref<string | null>(null)
 
@@ -21,7 +22,6 @@ export const useAuthStore = defineStore('auth', () => {
 
   const getUser = computed(() => user.value)
   const clearError = () => (error.value = null)
-  const { loadUserCart } = useCartStore()
   const register = async (userData: Record<string, never>) => {
     clearError()
     setLoading(true)
@@ -56,6 +56,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
       const data: User = await $fetch('/api/auth/auth_me', { method: 'GET' })
       setUser(data)
+      await loadUserCart()
     } catch (err: unknown) {
       const e = err as {
         data?: { message?: string }
@@ -72,6 +73,7 @@ export const useAuthStore = defineStore('auth', () => {
       setLoading(true)
       await $fetch('/api/auth/logout', { method: 'POST' })
       setUser(null)
+      await clearCart()
     } catch (err: unknown) {
       const e = err as {
         message?: string
