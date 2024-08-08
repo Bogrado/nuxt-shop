@@ -8,7 +8,7 @@
       :product="product"
       @on-add-to-cart="cartStore.addItem($event)"
       @on-remove-from-cart="cartStore.removeItem($event)"
-      @on-favorite-click="favoriteStore.toggleFavorite($event)"
+      @on-favorite-click="toggleFavorite($event)"
     />
   </div>
 </template>
@@ -22,4 +22,13 @@ defineProps<{
 
 const cartStore = useCartStore()
 const favoriteStore = useFavoriteStore()
+const { user } = useAuth()
+
+const toggleFavorite = (id: number) => {
+  if (!user.value?.id) {
+    navigateTo('/auth_user/login')
+    return
+  }
+  favoriteStore.toggleFavorite(id)
+}
 </script>

@@ -27,10 +27,16 @@
           <component :is="link.icon" class="w-8 h-8 fill-current" />
           <span class="text-sm">{{ link.label }}</span>
           <span
-            v-if="link.to === '/cart'"
+            v-if="link.to === '/cart' && totalItems"
             class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center"
           >
-            {{ totalItems || 0 }}
+            {{ totalItems }}
+          </span>
+          <span
+            v-if="link.to === '/favorites' && totalFavorites"
+            class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center"
+          >
+            {{ totalFavorites }}
           </span>
         </nuxt-link>
       </li>
@@ -80,13 +86,14 @@ import VAccount from '~/components/icons/VAccount.vue'
 
 const { user } = useAuth()
 const cartStore = useCartStore()
+const favoriteStore = useFavoriteStore()
 const isMenuOpen = ref(false)
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 const totalItems = computed(() => cartStore.totalItems)
-
+const totalFavorites = computed(() => favoriteStore.totalItems)
 const links = ref([
   { to: '/favorites', label: 'Избранное', icon: markRaw(VLike) },
   { to: '/cart', label: 'Корзина', icon: markRaw(VCart) },

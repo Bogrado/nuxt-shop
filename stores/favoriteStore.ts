@@ -113,5 +113,6 @@ export const useFavoriteStore = defineStore('favorites', () => {
     loadFavoritesProducts,
     toggleFavorite,
     products,
+    totalItems,
   }
 })
