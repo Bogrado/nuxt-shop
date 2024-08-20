@@ -111,7 +111,7 @@ export const useCartStore = defineStore('cart', () => {
         )
         state.items = fetchedProducts.flatMap(product => {
           const itemCount = itemIds.value.filter(id => id === product.id).length
-          return Array(itemCount).fill(product)
+          return Array(itemCount).fill(product) // Если в корзине есть несколько экземпляров одного и того же товара, этот товар будет повторяться в массиве state.items столько раз, сколько экземпляров находится в корзине.
         })
         return
       }
