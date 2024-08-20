@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Item } from '~/types'
+
 defineProps<{
   products: Item[]
 }>()
@@ -8,7 +9,7 @@ const cartStore = useCartStore()
 </script>
 
 <template>
-  <div class="flex-1" v-auto-animate>
+  <div v-auto-animate class="flex-1">
     <pages-cart-v-product
       v-for="product in products"
       :key="product.id"

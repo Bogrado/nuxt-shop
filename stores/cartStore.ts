@@ -1,6 +1,7 @@
 // stores/cartStore.ts
 import type { ComputedRef } from 'vue'
 import type { CartData, Item } from '~/types'
+import { denormalizeCartItems } from '~/utils/denormalizeCartItems'
 
 export const useCartStore = defineStore('cart', () => {
   const authStore = useAuthStore()
@@ -49,12 +50,12 @@ export const useCartStore = defineStore('cart', () => {
     state.loadingItems[itemId] = true
     try {
       state.items.push({
-        category: 'loading...',
+        category: '',
         count: 0,
         image: 'https://placehold.co/600x400',
         price: 0,
         rate: 0,
-        title: 'loading...',
+        title: '',
         id: itemId,
       })
       if (user?.value?.id) {
@@ -109,10 +110,7 @@ export const useCartStore = defineStore('cart', () => {
             },
           }
         )
-        state.items = fetchedProducts.flatMap(product => {
-          const itemCount = itemIds.value.filter(id => id === product.id).length
-          return Array(itemCount).fill(product) // Если в корзине есть несколько экземпляров одного и того же товара, этот товар будет повторяться в массиве state.items столько раз, сколько экземпляров находится в корзине.
-        })
+        state.items = denormalizeCartItems(fetchedProducts, itemIds.value)
         return
       }
       state.items = []

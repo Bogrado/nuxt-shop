@@ -18,6 +18,7 @@ const itemTotalAmount = computed(() =>
 <template>
   <div v-auto-animate>
     <v-preloader v-if="loadingItem" class="w-20 h-20" />
+    <pages-cart-v-card-skeleton v-else-if="!props.product.title" />
     <div
       v-else
       class="border-b py-4 flex flex-col md:flex-row justify-between items-start md:items-center"

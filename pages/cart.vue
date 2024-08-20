@@ -4,7 +4,7 @@ const cartStore = useCartStore()
 const products = computed(() => cartStore.products)
 </script>
 <template>
-  <div>
+  <client-only>
     <!-- Заголовок страницы -->
     <pages-v-page-header title="Корзина" />
     <div v-if="!cartStore.products.length" class="text-center text-gray-700">
@@ -40,5 +40,5 @@ const products = computed(() => cartStore.products)
         <!--      </OrderSummary>-->
       </div>
     </div>
-  </div>
+  </client-only>
 </template>
