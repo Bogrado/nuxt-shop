@@ -14,7 +14,7 @@ export const useCartStore = defineStore('cart', () => {
 
   // Инициализация sessionId для незарегистрированных пользователей
   const initSessionId = () => {
-    if (!state.sessionId && import.meta.client) {
+    if (!state.sessionId && import.meta.client && !user?.value?.id) {
       const storedSessionId = localStorage.getItem('cart_session_id')
       if (storedSessionId) {
         state.sessionId = storedSessionId
@@ -30,10 +30,16 @@ export const useCartStore = defineStore('cart', () => {
     state.cartLoading = true
     if (user?.value?.id) {
       try {
-        const cart: CartData = await $fetch(`/api/cart/user_items`, {
+        const response: CartData = await $fetch(`/api/cart/user_items`, {
           params: { user_id: user.value.id },
         })
-        state.items = [...state.items, ...cart.items]
+        const itemIds = response.items.map((item: { id: number }) => item.id)
+        if (itemIds.length > 0) {
+          // 2. Загружаем полные данные о товарах по их идентификаторам
+          await loadCartProducts(itemIds)
+        } else {
+          state.items = []
+        }
       } catch (error) {
         console.error('Error loading user cart:', error)
       } finally {
@@ -63,11 +69,12 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   const loadAnonCartFromServer = async () => {
+    if (user?.value?.id) return
     initSessionId() // Инициализация sessionId при загрузке корзины для незарегистрированных пользователей
 
     try {
       // 1. Загрузка ID товаров из редис
-      const response = await $fetch('/api/cart/anon_cart', {
+      const response: CartData = await $fetch('/api/cart/anon_cart', {
         params: { sessionId: state.sessionId },
       })
 
@@ -75,19 +82,7 @@ export const useCartStore = defineStore('cart', () => {
 
       if (itemIds.length > 0) {
         // 2. Загружаем полные данные о товарах по их идентификаторам
-        const fetchedProducts: Item[] = await $fetch<Item[]>(
-          '/api/data/items',
-          {
-            method: 'GET',
-            params: {
-              id: itemIds,
-              _select: '-description',
-            },
-          }
-        )
-
-        // 3. Восстановление стейта
-        state.items = denormalizeCartItems(fetchedProducts, itemIds)
+        await loadCartProducts(itemIds)
       } else {
         state.items = []
       }
@@ -156,23 +151,23 @@ export const useCartStore = defineStore('cart', () => {
     await syncCartWithServer()
   }
 
-  const loadCartProducts = async () => {
+  const loadCartProducts = async (itemIds: number[] = []) => {
     state.cartLoading = true
     try {
-      if (itemIds.value.length > 0) {
+      if (itemIds.length > 0) {
         const fetchedProducts: Item[] = await $fetch<Item[]>(
           '/api/data/items',
           {
             method: 'GET',
             params: {
-              id: itemIds.value,
+              id: itemIds,
               _select: '-description',
             },
           }
         )
 
-        state.items = denormalizeCartItems(fetchedProducts, itemIds.value)
-        console.log('loaded cart products:', state.items)
+        state.items = denormalizeCartItems(fetchedProducts, itemIds)
+        // console.log('loaded cart products:', state.items)
       } else {
         state.items = []
       }
@@ -215,7 +210,7 @@ export const useCartStore = defineStore('cart', () => {
   watch(totalItems, async () => {
     await syncCartWithServer()
     console.log('worked')
-    await loadCartProducts()
+    await loadCartProducts(itemIds.value)
   })
 
   return {
