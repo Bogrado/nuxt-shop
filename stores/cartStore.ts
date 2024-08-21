@@ -1,8 +1,9 @@
+// stores/cartStore.ts
 import type { ComputedRef } from 'vue'
-import type { CartData, Item } from '~/types'
-import { denormalizeCartItems } from '~/utils/denormalizeCartItems'
+import type { Item } from '~/types'
 import debounce from 'lodash.debounce'
-import { useCartManagement } from '~/stores/cart-modules/actions'
+import { useCartManagement } from '~/stores/cart-modules/actions/cartManagement'
+import { useSyncCart } from '~/stores/cart-modules/actions/syncCart'
 
 export const useCartStore = defineStore('cart', () => {
   const authStore = useAuthStore()
@@ -15,152 +16,13 @@ export const useCartStore = defineStore('cart', () => {
   })
 
   const { addItem, removeItem, removeAll, clearCart } = useCartManagement()
-
-  const initSessionId = () => {
-    if (!state.sessionId && import.meta.client && !user?.value?.id) {
-      const storedSessionId = localStorage.getItem('cart_session_id')
-      if (storedSessionId) {
-        state.sessionId = storedSessionId
-      } else {
-        // Генерация нового уникального sessionId
-        state.sessionId = crypto.randomUUID()
-        localStorage.setItem('cart_session_id', state.sessionId)
-      }
-    }
-  }
-
-  const loadUserCart = async () => {
-    state.cartLoading = true
-    if (user?.value?.id) {
-      try {
-        const response: CartData = await $fetch(`/api/cart/user_items`, {
-          params: { user_id: user.value.id },
-        })
-        const itemIds = response.items.map((item: { id: number }) => item.id)
-        if (itemIds.length > 0) {
-          await loadCartProducts(itemIds)
-        } else {
-          state.items = []
-        }
-      } catch (error) {
-        console.error('Error loading user cart:', error)
-      } finally {
-        state.cartLoading = false
-      }
-    } else {
-      await loadAnonCartFromServer()
-    }
-  }
-
-  const syncCartWithServer = async () => {
-    state.cartLoading = true
-    if (user?.value?.id) {
-      try {
-        await $fetch(`/api/cart/user_items`, {
-          method: 'PATCH',
-          body: { user_id: user.value.id, items: itemsWithIds.value },
-        })
-      } catch (error) {
-        console.error('Error syncing cart with server:', error)
-      } finally {
-        state.cartLoading = false
-      }
-    } else {
-      await saveAnonCartToServer()
-    }
-  }
-
-  const loadAnonCartFromServer = async () => {
-    if (user?.value?.id) return
-    initSessionId()
-
-    try {
-      const response: CartData = await $fetch('/api/cart/anon_cart', {
-        params: { sessionId: state.sessionId },
-      })
-
-      const itemIds = response.items.map((item: { id: number }) => item.id)
-
-      if (itemIds.length > 0) {
-        await loadCartProducts(itemIds)
-      } else {
-        state.items = []
-      }
-    } catch (error) {
-      console.error('Failed to load anonymous cart:', error)
-    } finally {
-      state.cartLoading = false
-    }
-  }
-
-  const saveAnonCartToServer = async () => {
-    if (!state.sessionId) return
-
-    try {
-      await $fetch('/api/cart/anon_cart', {
-        method: 'POST',
-        body: { sessionId: state.sessionId, cartItems: itemsWithIds.value },
-      })
-    } catch (error) {
-      console.error('Failed to save anonymous cart:', error)
-    }
-  }
-
-  const mergeAnonCartWithUserCart = async () => {
-    try {
-      await loadAnonCartFromServer()
-
-      if (state.items.length > 0) {
-        const userCart: CartData = await $fetch(`/api/cart/user_items`, {
-          params: { user_id: user?.value?.id },
-        })
-
-        const userCartItems = userCart.items.map(
-          (item: { id: number }) => item.id
-        )
-        const mergedItems = [...userCartItems, ...itemIds.value]
-
-        await loadCartProducts(mergedItems)
-        await syncCartWithServer()
-
-        await $fetch(`/api/cart/anon_cart`, {
-          method: 'DELETE',
-          body: { sessionId: state.sessionId },
-        })
-
-        localStorage.removeItem('cart_session_id')
-        state.sessionId = ''
-      }
-    } catch (error) {
-      console.error('Failed to merge anonymous cart with user cart:', error)
-    }
-  }
-
-  const loadCartProducts = async (itemIds: number[] = []) => {
-    state.cartLoading = true
-    try {
-      if (itemIds.length > 0) {
-        const fetchedProducts: Item[] = await $fetch<Item[]>(
-          '/api/data/items',
-          {
-            method: 'GET',
-            params: {
-              id: itemIds,
-              _select: '-description',
-            },
-          }
-        )
-
-        state.items = denormalizeCartItems(fetchedProducts, itemIds)
-      } else {
-        state.items = []
-      }
-    } catch (error) {
-      console.error('Failed to load cart products:', error)
-    } finally {
-      state.cartLoading = false
-    }
-  }
+  const {
+    loadCartProducts,
+    loadUserCart,
+    initSessionId,
+    mergeAnonCartWithUserCart,
+    syncCartWithServer,
+  } = useSyncCart()
 
   const itemQuantity = computed(
     () => (itemId: number) =>
@@ -218,5 +80,6 @@ export const useCartStore = defineStore('cart', () => {
     removeAll,
     clearCart,
     syncCartWithServer,
+    user,
   }
 })

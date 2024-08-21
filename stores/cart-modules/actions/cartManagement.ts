@@ -1,4 +1,4 @@
-// cart-modules/actions.ts
+// stores/cart-modules/cartManagement.ts
 import { useCartStore } from '~/stores/cartStore'
 
 export const useCartManagement = () => {
@@ -19,10 +19,9 @@ export const useCartManagement = () => {
       })
       await cartStore.syncCartWithServer()
     } catch (e) {
-      console.error(e)
+      handleFetchError(e)
     } finally {
       cartStore.state.loadingItems[itemId] = false
-      console.log(cartStore.state.loadingItems[itemId])
     }
   }
 
@@ -35,7 +34,7 @@ export const useCartManagement = () => {
       }
       await cartStore.syncCartWithServer()
     } catch (e) {
-      console.error(e)
+      handleFetchError(e)
     } finally {
       cartStore.state.loadingItems[itemId] = false
     }

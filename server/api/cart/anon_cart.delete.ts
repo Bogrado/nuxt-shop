@@ -1,5 +1,6 @@
 // server/api/cart/anon_cart.delete.ts
 import redis from '~/server/utils/redis'
+import { handleFetchError } from '~/utils/handleFetchError'
 
 export default defineEventHandler(async event => {
   const body = await readBody(event)
@@ -12,8 +13,7 @@ export default defineEventHandler(async event => {
   try {
     await redis.del(`cart:${sessionId}`)
     return { success: true }
-  } catch (error) {
-    console.error('Failed to delete anonymous cart:', error)
-    throw new Error('Failed to delete anonymous cart')
+  } catch (e) {
+    handleFetchError(e)
   }
 })
