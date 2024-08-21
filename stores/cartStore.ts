@@ -1,6 +1,7 @@
 import type { ComputedRef } from 'vue'
 import type { CartData, Item } from '~/types'
 import { denormalizeCartItems } from '~/utils/denormalizeCartItems'
+import debounce from 'lodash.debounce'
 
 export const useCartStore = defineStore('cart', () => {
   const authStore = useAuthStore()
@@ -207,11 +208,14 @@ export const useCartStore = defineStore('cart', () => {
     return state.loadingItems[itemId] || false
   })
 
-  watch(totalItems, async () => {
-    await syncCartWithServer()
-    console.log('worked')
-    await loadCartProducts(itemIds.value)
-  })
+  watch(
+    totalItems,
+    debounce(async () => {
+      await syncCartWithServer()
+      console.log('worked')
+      await loadCartProducts(itemIds.value)
+    }, 500)
+  )
 
   return {
     state,
