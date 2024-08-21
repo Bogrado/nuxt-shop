@@ -2,7 +2,8 @@ export const useAuthStore = defineStore('auth', () => {
   const config = useRuntimeConfig()
   const { setLoading } = useLoadingStore()
   const { createCartForUser, createFavoritesForUser } = useUserSetup()
-  const { loadUserCart, clearCart, initSessionId } = useCartStore()
+  const { loadUserCart, clearCart, initSessionId, mergeAnonCartWithUserCart } =
+    useCartStore()
   const { loadUserFavorites, clearFavorites } = useFavoriteStore()
   const user = ref<User | null>(null)
   const error = ref<string | null>(null)
@@ -57,6 +58,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
       const data: User = await $fetch('/api/auth/auth_me', { method: 'GET' })
       setUser(data)
+      await mergeAnonCartWithUserCart()
       await loadUserCart()
       await loadUserFavorites()
     } catch (err: unknown) {
@@ -97,6 +99,7 @@ export const useAuthStore = defineStore('auth', () => {
           headers: useRequestHeaders(['cookie']) as HeadersInit,
         })
         setUser(data)
+        await mergeAnonCartWithUserCart()
         await loadUserCart()
         await loadUserFavorites()
       } catch (e) {
