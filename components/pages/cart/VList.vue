@@ -6,6 +6,7 @@ defineProps<{
 }>()
 
 const cartStore = useCartStore()
+const favoriteStore = useFavoriteStore()
 </script>
 
 <template>
@@ -17,6 +18,7 @@ const cartStore = useCartStore()
       @click-increase="cartStore.addItem(product.id)"
       @click-decrease="cartStore.removeItem(product.id)"
       @click-delete="cartStore.removeAll(product.id)"
+      @click-favorite="favoriteStore.toggleFavorite(product.id)"
     />
   </div>
 </template>

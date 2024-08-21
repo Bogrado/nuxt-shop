@@ -5,7 +5,12 @@ const props = defineProps<{
   product: Item
 }>()
 
-const emit = defineEmits(['ClickDecrease', 'ClickIncrease', 'ClickDelete'])
+const emit = defineEmits([
+  'clickDecrease',
+  'clickIncrease',
+  'clickDelete',
+  'clickFavorite',
+])
 
 const cartStore = useCartStore()
 const quantity = computed(() => cartStore.itemQuantity(props.product.id))
@@ -28,7 +33,9 @@ const itemTotalAmount = computed(() =>
         <div class="ml-4">
           <pages-cart-v-product-body :product="props.product" />
           <pages-cart-v-product-bottom-bar
-            @handle-delete-click="emit('ClickDelete')"
+            :product="props.product"
+            @handle-delete-click="emit('clickDelete')"
+            @on-favorite-click="emit('clickFavorite')"
           />
         </div>
       </div>
@@ -41,8 +48,8 @@ const itemTotalAmount = computed(() =>
         </div>
         <common-v-quantity-manager
           :quantity="quantity"
-          @on-click-decrease="emit('ClickDecrease')"
-          @on-click-increase="emit('ClickIncrease')"
+          @on-click-decrease="emit('clickDecrease')"
+          @on-click-increase="emit('clickIncrease')"
         />
       </div>
     </div>
