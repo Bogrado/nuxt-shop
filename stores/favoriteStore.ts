@@ -94,6 +94,13 @@ export const useFavoriteStore = defineStore('favorites', () => {
     }
   }
 
+  const clearFavorites = async () => {
+    state.items = []
+    if (user?.value?.id) {
+      await syncFavoritesWithServer()
+    }
+  }
+
   const itemIds = computed(() => {
     return state.items.map(item => item.id)
   })
@@ -112,6 +119,7 @@ export const useFavoriteStore = defineStore('favorites', () => {
     loadUserFavorites,
     loadFavoritesProducts,
     toggleFavorite,
+    clearFavorites,
     products,
     totalItems,
   }

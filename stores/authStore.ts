@@ -2,8 +2,8 @@ export const useAuthStore = defineStore('auth', () => {
   const config = useRuntimeConfig()
   const { setLoading } = useLoadingStore()
   const { createCartForUser, createFavoritesForUser } = useUserSetup()
-  const { loadUserCart, clearCart } = useCartStore()
-  const { loadUserFavorites } = useFavoriteStore()
+  const { loadUserCart, clearCart, initSessionId } = useCartStore()
+  const { loadUserFavorites, clearFavorites } = useFavoriteStore()
   const user = ref<User | null>(null)
   const error = ref<string | null>(null)
 
@@ -76,6 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
       await $fetch('/api/auth/logout', { method: 'POST' })
       setUser(null)
       await clearCart()
+      await clearFavorites()
     } catch (err: unknown) {
       const e = err as {
         message?: string
@@ -103,6 +104,9 @@ export const useAuthStore = defineStore('auth', () => {
       } finally {
         /* empty */
       }
+    } else {
+      initSessionId()
+      await loadUserCart()
     }
   }
 

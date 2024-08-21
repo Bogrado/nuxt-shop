@@ -26,18 +26,22 @@
         >
           <component :is="link.icon" class="w-8 h-8 fill-current" />
           <span class="text-sm">{{ link.label }}</span>
-          <span
-            v-if="link.to === '/cart' && totalItems"
-            class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center"
-          >
-            {{ totalItems }}
-          </span>
-          <span
-            v-if="link.to === '/favorites' && totalFavorites"
-            class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center"
-          >
-            {{ totalFavorites }}
-          </span>
+          <client-only>
+            <span
+              v-if="link.to === '/cart' && totalItems"
+              class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center"
+            >
+              {{ totalItems }}
+            </span>
+          </client-only>
+          <client-only>
+            <span
+              v-if="link.to === '/favorites' && totalFavorites"
+              class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center"
+            >
+              {{ totalFavorites }}
+            </span>
+          </client-only>
         </nuxt-link>
       </li>
       <li

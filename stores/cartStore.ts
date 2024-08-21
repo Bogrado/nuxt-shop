@@ -1,4 +1,3 @@
-// stores/cartStore.ts
 import type { ComputedRef } from 'vue'
 import type { CartData, Item } from '~/types'
 import { denormalizeCartItems } from '~/utils/denormalizeCartItems'
@@ -8,9 +7,24 @@ export const useCartStore = defineStore('cart', () => {
   const user = computed(() => authStore.getUser)
   const state = reactive({
     items: [] as Item[],
+    sessionId: '', // Сессионный идентификатор для незарегистрированных пользователей
     cartLoading: false,
     loadingItems: {} as { [key: number]: boolean }, // состояние загрузки для каждого товара
   })
+
+  // Инициализация sessionId для незарегистрированных пользователей
+  const initSessionId = () => {
+    if (!state.sessionId && import.meta.client) {
+      const storedSessionId = localStorage.getItem('cart_session_id')
+      if (storedSessionId) {
+        state.sessionId = storedSessionId
+      } else {
+        // Генерация нового уникального sessionId
+        state.sessionId = crypto.randomUUID()
+        localStorage.setItem('cart_session_id', state.sessionId)
+      }
+    }
+  }
 
   const loadUserCart = async () => {
     state.cartLoading = true
@@ -21,12 +35,12 @@ export const useCartStore = defineStore('cart', () => {
         })
         state.items = [...state.items, ...cart.items]
       } catch (error) {
-        console.error('Error cartLoading user cart:', error)
+        console.error('Error loading user cart:', error)
       } finally {
         state.cartLoading = false
       }
     } else {
-      console.error('User is not authenticated')
+      await loadAnonCartFromServer()
     }
   }
 
@@ -43,10 +57,61 @@ export const useCartStore = defineStore('cart', () => {
       } finally {
         state.cartLoading = false
       }
+    } else {
+      await saveAnonCartToServer()
     }
   }
+
+  const loadAnonCartFromServer = async () => {
+    initSessionId() // Инициализация sessionId при загрузке корзины для незарегистрированных пользователей
+
+    try {
+      // 1. Загрузка ID товаров из редис
+      const response = await $fetch('/api/cart/anon_cart', {
+        params: { sessionId: state.sessionId },
+      })
+
+      const itemIds = response.items.map((item: { id: number }) => item.id)
+
+      if (itemIds.length > 0) {
+        // 2. Загружаем полные данные о товарах по их идентификаторам
+        const fetchedProducts: Item[] = await $fetch<Item[]>(
+          '/api/data/items',
+          {
+            method: 'GET',
+            params: {
+              id: itemIds,
+              _select: '-description',
+            },
+          }
+        )
+
+        // 3. Восстановление стейта
+        state.items = denormalizeCartItems(fetchedProducts, itemIds)
+      } else {
+        state.items = []
+      }
+    } catch (error) {
+      console.error('Failed to load anonymous cart:', error)
+    } finally {
+      state.cartLoading = false
+    }
+  }
+
+  const saveAnonCartToServer = async () => {
+    if (!state.sessionId) return
+
+    try {
+      await $fetch('/api/cart/anon_cart', {
+        method: 'POST',
+        body: { sessionId: state.sessionId, cartItems: itemsWithIds.value },
+      })
+    } catch (error) {
+      console.error('Failed to save anonymous cart:', error)
+    }
+  }
+
   const addItem = async (itemId: number) => {
-    // в принципе.... да все-равно заменятся, пусть будут пустые
     state.loadingItems[itemId] = true
     try {
       state.items.push({
@@ -58,8 +123,20 @@ export const useCartStore = defineStore('cart', () => {
         title: '',
         id: itemId,
       })
-      if (user?.value?.id) {
-        console.log('additem')
+      await syncCartWithServer()
+    } catch (e) {
+      console.error(e)
+    } finally {
+      state.loadingItems[itemId] = false
+    }
+  }
+
+  const removeItem = async (itemId: number) => {
+    state.loadingItems[itemId] = true
+    try {
+      const index = state.items.findIndex(item => item.id === itemId)
+      if (index !== -1) {
+        state.items.splice(index, 1)
         await syncCartWithServer()
       }
     } catch (e) {
@@ -68,34 +145,17 @@ export const useCartStore = defineStore('cart', () => {
       state.loadingItems[itemId] = false
     }
   }
-  const removeItem = async (itemId: number) => {
-    state.loadingItems[itemId] = true
-    try {
-      const index = state.items.findIndex(item => item.id === itemId)
-      if (index !== -1) {
-        state.items.splice(index, 1)
-        if (user?.value?.id) {
-          await syncCartWithServer()
-        }
-      }
-    } catch (e) {
-      console.error(e)
-    } finally {
-      state.loadingItems[itemId] = false
-    }
-  }
+
   const removeAll = async (itemId: number) => {
     state.items = state.items.filter(item => item.id !== itemId)
-    if (user?.value?.id) {
-      await syncCartWithServer()
-    }
+    await syncCartWithServer()
   }
+
   const clearCart = async () => {
     state.items = []
-    if (user?.value?.id) {
-      await syncCartWithServer()
-    }
+    await syncCartWithServer()
   }
+
   const loadCartProducts = async () => {
     state.cartLoading = true
     try {
@@ -110,21 +170,24 @@ export const useCartStore = defineStore('cart', () => {
             },
           }
         )
+
         state.items = denormalizeCartItems(fetchedProducts, itemIds.value)
-        return
+        console.log('loaded cart products:', state.items)
+      } else {
+        state.items = []
       }
-      state.items = []
     } catch (error) {
       console.error('Failed to load cart products:', error)
     } finally {
       state.cartLoading = false
     }
   }
-  //
+
   const itemQuantity = computed(
     () => (itemId: number) =>
       state.items.filter(item => item.id === itemId).length
   )
+
   const products = computed(() => {
     const uniqueProducts: { [key: number]: Item } = {}
     state.items.forEach(item => {
@@ -132,29 +195,29 @@ export const useCartStore = defineStore('cart', () => {
     })
     return Object.values(uniqueProducts)
   })
-  //
-  // const totalPrice = computed(() => {
-  //   const total = state.items.reduce((total, item) => total + item.price, 0)
-  //   return Number(total.toFixed(2))
-  // })
-  //
+
   const itemIds = computed(() =>
     state.items.map((item: { id: number }) => item.id)
   )
-  const totalItems: ComputedRef<number> = computed(() => state.items.length) // кол-во товаров в корзине
+
+  const totalItems: ComputedRef<number> = computed(() => state.items.length)
+
   const itemsWithIds = computed(() => {
-    return state.items.map((item: { id: number }) => ({ id: item.id })) // для передачи в боди объектов из state в виде {id: number}
+    return state.items.map((item: { id: number }) => ({ id: item.id }))
   })
+
   const cartLoading = computed(() => state.cartLoading)
+
   const itemLoading = computed(() => (itemId: number) => {
     return state.loadingItems[itemId] || false
   })
+
   watch(totalItems, async () => {
-    if (user?.value?.id) {
-      await syncCartWithServer()
-    }
+    await syncCartWithServer()
+    console.log('worked')
     await loadCartProducts()
   })
+
   return {
     state,
     addItem,
@@ -170,5 +233,6 @@ export const useCartStore = defineStore('cart', () => {
     itemIds,
     cartLoading,
     itemLoading,
+    initSessionId,
   }
 })
