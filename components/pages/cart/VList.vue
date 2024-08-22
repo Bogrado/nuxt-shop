@@ -7,6 +7,15 @@ defineProps<{
 
 const cartStore = useCartStore()
 const favoriteStore = useFavoriteStore()
+const { user } = useAuth()
+
+const toggleFavorite = (id: number) => {
+  if (!user.value?.id) {
+    navigateTo('/auth_user/login')
+    return
+  }
+  favoriteStore.toggleFavorite(id)
+}
 </script>
 
 <template>
@@ -18,7 +27,7 @@ const favoriteStore = useFavoriteStore()
       @click-increase="cartStore.addItem(product.id)"
       @click-decrease="cartStore.removeItem(product.id)"
       @click-delete="cartStore.removeAll(product.id)"
-      @click-favorite="favoriteStore.toggleFavorite(product.id)"
+      @click-favorite="toggleFavorite(product.id)"
     />
   </div>
 </template>
