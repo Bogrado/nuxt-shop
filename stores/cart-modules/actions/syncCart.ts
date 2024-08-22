@@ -3,19 +3,20 @@ import type { CartData, Item } from '~/types'
 import { denormalizeCartItems } from '~/utils/denormalizeCartItems'
 
 export const useSyncCart = () => {
+  const config = useRuntimeConfig()
   const cartStore = useCartStore()
   const authStore = useAuthStore()
   const user = computed(() => authStore.getUser)
 
   const initSessionId = () => {
     if (!cartStore.state.sessionId && import.meta.client && !user?.value?.id) {
-      const storedSessionId = localStorage.getItem('cart_session_id')
+      const storedSessionId = localStorage.getItem(config.public.anonName)
       if (storedSessionId) {
         cartStore.state.sessionId = storedSessionId
       } else {
         // Генерация нового уникального sessionId
         cartStore.state.sessionId = crypto.randomUUID()
-        localStorage.setItem('cart_session_id', cartStore.state.sessionId)
+        localStorage.setItem(config.public.anonName, cartStore.state.sessionId)
       }
     }
   }
@@ -148,7 +149,7 @@ export const useSyncCart = () => {
           body: { sessionId: cartStore.state.sessionId },
         })
 
-        localStorage.removeItem('cart_session_id')
+        localStorage.removeItem(config.public.anonName)
         cartStore.state.sessionId = ''
       }
     } catch (e) {

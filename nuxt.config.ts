@@ -1,6 +1,6 @@
 const ONE_DAY = 60 * 60 * 24 * 1000
 const ONE_WEEK = ONE_DAY * 7
-
+const ONE_HOUR = 60 * 60 * 1000
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
@@ -33,6 +33,11 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
+      anonName: process.env.GUEST_NAME || 'anon_session_id',
+      anonExpires: parseInt(
+        process.env.ANON_EXPIRES || ONE_HOUR.toString(),
+        10
+      ), // 1 hour
       cookieName: process.env.COOKIE_NAME || 'auth_token',
       baseUrl: process.env.BASE_URL || 'https://7af91f1883946b22.mokky.dev',
       cookieExpires: parseInt(

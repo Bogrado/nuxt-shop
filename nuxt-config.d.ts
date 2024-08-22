@@ -17,6 +17,8 @@ declare module '@nuxt/schema' {
     compatibilityDate?: string
     runtimeConfig?: {
       public?: {
+        anonName?: string
+        anonExpires?: number
         baseUrl?: string
         cookieName?: string
         cookieExpires?: number
