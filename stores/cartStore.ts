@@ -22,6 +22,7 @@ export const useCartStore = defineStore('cart', () => {
     initSessionId,
     mergeAnonCartWithUserCart,
     syncCartWithServer,
+    loadAnonCartFromServer,
   } = useSyncCart()
 
   const itemQuantity = computed(
@@ -80,6 +81,7 @@ export const useCartStore = defineStore('cart', () => {
     removeAll,
     clearCart,
     syncCartWithServer,
+    loadAnonCartFromServer,
     user,
   }
 })

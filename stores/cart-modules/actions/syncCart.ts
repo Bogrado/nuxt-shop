@@ -49,7 +49,6 @@ export const useSyncCart = () => {
 
   const loadAnonCartFromServer = async () => {
     if (user?.value?.id) return
-    initSessionId()
 
     try {
       const response: CartData = await $fetch('/api/cart/anon_cart', {
@@ -88,8 +87,6 @@ export const useSyncCart = () => {
       } finally {
         cartStore.state.cartLoading = false
       }
-    } else {
-      await loadAnonCartFromServer()
     }
   }
 

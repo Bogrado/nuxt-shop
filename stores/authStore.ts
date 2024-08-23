@@ -2,8 +2,13 @@ export const useAuthStore = defineStore('auth', () => {
   const config = useRuntimeConfig()
   const { setLoading } = useLoadingStore()
   const { createCartForUser, createFavoritesForUser } = useUserSetup()
-  const { loadUserCart, clearCart, initSessionId, mergeAnonCartWithUserCart } =
-    useCartStore()
+  const {
+    loadUserCart,
+    clearCart,
+    loadAnonCartFromServer,
+    mergeAnonCartWithUserCart,
+    initSessionId,
+  } = useCartStore()
   const { loadUserFavorites, clearFavorites } = useFavoriteStore()
   const user = ref<User | null>(null)
   const error = ref<string | null>(null)
@@ -110,8 +115,9 @@ export const useAuthStore = defineStore('auth', () => {
         /* empty */
       }
     } else {
+      console.log('aboba')
       initSessionId()
-      await loadUserCart()
+      await loadAnonCartFromServer()
     }
   }
 
