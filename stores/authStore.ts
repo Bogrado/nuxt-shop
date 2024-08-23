@@ -16,6 +16,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   interface User {
     id: number
+    role: string
+    nickName: string
   }
 
   const setUser = (userData: User | null) => {

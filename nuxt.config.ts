@@ -28,9 +28,6 @@ export default defineNuxtConfig({
     },
     display: 'swap', // рекомендованная опция для улучшения производительности
   },
-  router: {
-    middleware: ['check-auth'], // global middleware
-  },
   runtimeConfig: {
     public: {
       anonName: process.env.GUEST_NAME || 'anon_session_id',
