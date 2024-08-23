@@ -2,7 +2,7 @@ import { email, minLength, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 
 export const useLoginForm = () => {
-  const { error } = useAuth()
+  const { login, error, user } = useAuth()
   const state = reactive({
     email: '',
     password: '',
@@ -16,9 +16,17 @@ export const useLoginForm = () => {
 
   const v$ = useVuelidate(rules, state)
 
+  const handleLogin = async (credentials: any) => {
+    await login(credentials)
+    if (!error.value && user.value) {
+      navigateTo('/catalog')
+    }
+  }
+
   return {
     state,
     error,
+    handleLogin,
     v$,
   }
 }

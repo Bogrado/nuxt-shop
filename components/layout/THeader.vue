@@ -48,14 +48,13 @@
         v-if="!user"
         class="flex flex-col items-center text-slate-500 cursor-pointer hover:text-white"
       >
-        <nuxt-link
-          to="/auth_user/login"
+        <button
           class="flex flex-col items-center"
-          active-class="text-white"
+          @click="handleOpenModal('login')"
         >
           <v-account class="w-8 h-8 fill-current" />
           <span class="text-sm">Войти</span>
-        </nuxt-link>
+        </button>
       </li>
       <li
         v-if="user"
@@ -105,7 +104,15 @@ import VAdmin from '~/components/icons/VAdmin.vue'
 const { user } = useAuth()
 const cartStore = useCartStore()
 const favoriteStore = useFavoriteStore()
+const modalStore = useModalStore()
+const route = useRoute()
 const isMenuOpen = ref(false)
+
+const handleOpenModal = (form: string) => {
+  if (route.name !== 'auth_user-login' && route.name !== 'auth_user-register') {
+    modalStore.openModal(form)
+  }
+}
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value

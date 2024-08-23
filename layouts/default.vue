@@ -16,12 +16,11 @@
 
     <!-- Footer -->
     <layout-t-footer />
+    <common-v-modal />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
 const isMenuOpen = ref(false)
 
 const toggleMenu = () => {

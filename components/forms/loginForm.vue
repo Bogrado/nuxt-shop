@@ -8,13 +8,14 @@ defineProps({
   },
 })
 
-const emit = defineEmits(['handleSubmit'])
+const emit = defineEmits(['switchTo', 'closeModal'])
 
-const { state, error, v$ } = useLoginForm()
+const { state, error, v$, handleLogin } = useLoginForm()
 
 const handleSubmit = async () => {
   if (await v$.value.$validate()) {
-    emit('handleSubmit', state)
+    await handleLogin(state)
+    await emit('closeModal')
   }
 }
 </script>
@@ -98,7 +99,7 @@ const handleSubmit = async () => {
           type="button"
           class="w-full mt-2 py-2 border border-gray-600 rounded text-gray-300 hover:bg-gray-700 transition"
           :disabled="loading"
-          @click="navigateTo('/auth_user/register')"
+          @click="emit('switchTo', 'register')"
         >
           Зарегистрироваться
         </button>

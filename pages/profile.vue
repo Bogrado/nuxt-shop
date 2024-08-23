@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { logout, user } = useAuth()
 const loadingStore = useLoadingStore()
+const modalStore = useModalStore()
 const loading = computed(() => loadingStore.loading)
 
 const handleLogout = async () => {
@@ -12,6 +13,13 @@ const handleLogout = async () => {
 <template>
   <div v-if="user">
     <pages-v-page-header :title="`Профиль пользователя ${user.nickName}`" />
+
+    <button
+      class="text-black mb-4 border border-amber-800"
+      @click="modalStore.openModal('login')"
+    >
+      check modal
+    </button>
 
     <div class="w-full mt-4 flex justify-center">
       <div

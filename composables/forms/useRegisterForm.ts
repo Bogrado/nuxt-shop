@@ -2,7 +2,7 @@ import { email, minLength, required, sameAs } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 
 export const useRegisterForm = () => {
-  const { error } = useAuth()
+  const { register, error } = useAuth()
   const state = reactive({
     nickName: '',
     email: '',
@@ -20,10 +20,18 @@ export const useRegisterForm = () => {
     },
   }
 
+  const handleRegister = async (credentials: any) => {
+    await register(credentials)
+    if (!error.value) {
+      navigateTo('/auth_user/login')
+    }
+  }
+
   const v$ = useVuelidate(rules, state)
 
   return {
     state,
+    handleRegister,
     error,
     v$,
   }

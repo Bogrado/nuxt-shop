@@ -8,13 +8,13 @@ defineProps({
   },
 })
 
-const emit = defineEmits(['handleSubmit'])
+const emit = defineEmits(['switchTo'])
 
-const { state, error, v$ } = useRegisterForm()
+const { state, error, v$, handleRegister } = useRegisterForm()
 
 const handleSubmit = async () => {
   if (await v$.value.$validate()) {
-    emit('handleSubmit', {
+    await handleRegister({
       nickName: state.nickName,
       email: state.email,
       password: state.password,
@@ -138,7 +138,7 @@ const handleSubmit = async () => {
         type="button"
         class="w-full mt-2 py-2 border border-gray-600 rounded text-gray-300 hover:bg-gray-700 transition"
         :disabled="loading"
-        @click="navigateTo('/auth_user/login')"
+        @click="emit('switchTo', 'login')"
       >
         Войти
       </button>
