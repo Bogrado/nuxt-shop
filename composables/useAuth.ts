@@ -2,41 +2,90 @@ import type { Credentials, UserData } from '~/types'
 
 export const useAuth = () => {
   const authStore = useAuthStore()
-  const { mergeAnonCartWithUserCart, loadUserCart, clearCart } = useCartStore()
+  const {
+    mergeAnonCartWithUserCart,
+    loadUserCart,
+    clearCart,
+    initSessionId,
+    loadAnonCartFromServer,
+    state,
+  } = useCartStore()
   const { loadUserFavorites, clearFavorites } = useFavoriteStore()
   const { createCartForUser, createFavoritesForUser } = useUserSetup()
+  const { setLoading } = useLoadingStore()
+  const config = useRuntimeConfig()
 
   const register = async (userData: UserData) => {
-    const response = await authStore.register(userData)
-    if (response?.data.id) {
-      await createCartForUser(response?.data.id)
-      await createFavoritesForUser(response?.data.id)
+    setLoading(true)
+    authStore.clearError()
+    try {
+      const response = await authStore.register(userData)
+      if (response?.data.id) {
+        await createCartForUser(response?.data.id)
+        await createFavoritesForUser(response?.data.id)
+      }
+    } catch (e) {
+      handleFetchError(e)
+    } finally {
+      setLoading(false)
     }
   }
 
   const login = async (credentials: Credentials) => {
-    const userData = await authStore.login(credentials)
-    if (userData) {
-      await mergeAnonCartWithUserCart()
-      await loadUserCart()
-      await loadUserFavorites()
+    setLoading(true)
+    authStore.clearError()
+    try {
+      const userData = await authStore.login(credentials)
+      if (userData) {
+        authStore.setUser(userData)
+        await mergeAnonCartWithUserCart()
+        await loadUserCart()
+        await loadUserFavorites()
+      }
+    } catch (e) {
+      handleFetchError(e)
+    } finally {
+      setLoading(false)
     }
   }
 
   const logout = async () => {
-    await authStore.logout()
-    if (!authStore.user) {
-      await clearCart()
-      await clearFavorites()
+    setLoading(true)
+    authStore.clearError()
+    try {
+      await authStore.logout()
+      authStore.setUser(null)
+      if (!authStore.user) {
+        await clearCart()
+        await clearFavorites()
+      }
+    } catch (e) {
+      handleFetchError(e)
+    } finally {
+      setLoading(false)
     }
   }
 
   const fetchUser = async () => {
-    const userData = await authStore.fetchUser()
-    if (userData) {
-      await mergeAnonCartWithUserCart()
-      await loadUserCart()
-      await loadUserFavorites()
+    authStore.clearError()
+    const token = useCookie(config.public.cookieName)
+    if (!user.value && token.value) {
+      try {
+        const userData = await authStore.fetchUser()
+        if (userData) {
+          authStore.setUser(userData)
+          await mergeAnonCartWithUserCart()
+          await loadUserCart()
+          await loadUserFavorites()
+        }
+        return userData
+      } catch (e) {
+        await logout()
+        handleFetchError(e)
+      }
+    } else if (!state.sessionId) {
+      initSessionId()
+      await loadAnonCartFromServer()
     }
   }
 
