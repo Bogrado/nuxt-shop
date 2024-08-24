@@ -1,7 +1,9 @@
 import type { ApiResponse, Credentials, User, UserData } from '~/types'
 
 export const useAuthStore = defineStore('auth', () => {
+  const config = useRuntimeConfig()
   const user = ref<User | null>(null)
+  const anonSessionId = ref<string | null>(null)
   const error = ref<string | null>(null)
 
   const setUser = (userData: User | null) => {
@@ -64,17 +66,39 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const initSessionId = () => {
+    if (!anonSessionId.value && import.meta.client && !user?.value?.id) {
+      const storedSessionId = localStorage.getItem(config.public.anonName)
+      if (storedSessionId) {
+        anonSessionId.value = storedSessionId
+      } else {
+        // Генерация нового уникального sessionId
+        anonSessionId.value = crypto.randomUUID()
+        localStorage.setItem(config.public.anonName, anonSessionId.value)
+      }
+    }
+  }
+
+  const removeSessionId = () => {
+    anonSessionId.value = ''
+  }
+
   const getUser = computed(() => user.value)
+  const getAnonSessionId = computed(() => anonSessionId.value)
 
   return {
     user,
+    anonSessionId,
+    error,
     setUser,
-    getUser,
     register,
     login,
     logout,
     fetchUser,
-    error,
     clearError,
+    initSessionId,
+    removeSessionId,
+    getUser,
+    getAnonSessionId,
   }
 })

@@ -6,9 +6,7 @@ export const useAuth = () => {
     mergeAnonCartWithUserCart,
     loadUserCart,
     clearCart,
-    initSessionId,
     loadAnonCartFromServer,
-    state,
   } = useCartStore()
   const { loadUserFavorites, clearFavorites } = useFavoriteStore()
   const { createCartForUser, createFavoritesForUser } = useUserSetup()
@@ -83,8 +81,8 @@ export const useAuth = () => {
         await logout()
         handleFetchError(e)
       }
-    } else if (!state.sessionId) {
-      initSessionId()
+    } else if (!sessionId.value) {
+      authStore.initSessionId()
       await loadAnonCartFromServer()
     }
   }
@@ -93,6 +91,7 @@ export const useAuth = () => {
 
   const user = computed(() => authStore.getUser)
   const error = computed(() => authStore.error)
+  const sessionId = computed(() => authStore.getAnonSessionId)
 
   return { user, register, login, logout, fetchUser, error, clearError }
 }

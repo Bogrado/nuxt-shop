@@ -7,19 +7,20 @@ export const useSyncCart = () => {
   const cartStore = useCartStore()
   const authStore = useAuthStore()
   const user = computed(() => authStore.getUser)
+  const sessionId = computed(() => authStore.getAnonSessionId)
 
-  const initSessionId = () => {
-    if (!cartStore.state.sessionId && import.meta.client && !user?.value?.id) {
-      const storedSessionId = localStorage.getItem(config.public.anonName)
-      if (storedSessionId) {
-        cartStore.state.sessionId = storedSessionId
-      } else {
-        // Генерация нового уникального sessionId
-        cartStore.state.sessionId = crypto.randomUUID()
-        localStorage.setItem(config.public.anonName, cartStore.state.sessionId)
-      }
-    }
-  }
+  // const initSessionId = () => {
+  //   if (!cartStore.state.sessionId && import.meta.client && !user?.value?.id) {
+  //     const storedSessionId = localStorage.getItem(config.public.anonName)
+  //     if (storedSessionId) {
+  //       cartStore.state.sessionId = storedSessionId
+  //     } else {
+  //       // Генерация нового уникального sessionId
+  //       cartStore.state.sessionId = crypto.randomUUID()
+  //       localStorage.setItem(config.public.anonName, cartStore.state.sessionId)
+  //     }
+  //   }
+  // }
 
   const loadCartProducts = async (itemIds: number[] = []) => {
     cartStore.state.cartLoading = true
@@ -52,7 +53,7 @@ export const useSyncCart = () => {
 
     try {
       const response: CartData = await $fetch('/api/cart/anon_cart', {
-        params: { sessionId: cartStore.state.sessionId },
+        params: { sessionId: sessionId.value },
       })
 
       const itemIds = response.items.map((item: { id: number }) => item.id)
@@ -91,13 +92,13 @@ export const useSyncCart = () => {
   }
 
   const saveAnonCartToServer = async () => {
-    if (!cartStore.state.sessionId) return
+    if (!sessionId.value) return
 
     try {
       await $fetch('/api/cart/anon_cart', {
         method: 'POST',
         body: {
-          sessionId: cartStore.state.sessionId,
+          sessionId: sessionId.value,
           cartItems: cartStore.itemsWithIds,
         },
       })
@@ -144,11 +145,11 @@ export const useSyncCart = () => {
 
         await $fetch(`/api/cart/anon_cart`, {
           method: 'DELETE',
-          body: { sessionId: cartStore.state.sessionId },
+          body: { sessionId: sessionId.value },
         })
 
         localStorage.removeItem(config.public.anonName)
-        cartStore.state.sessionId = ''
+        authStore.removeSessionId()
       }
     } catch (e) {
       handleFetchError(e)
@@ -157,7 +158,6 @@ export const useSyncCart = () => {
   return {
     loadCartProducts,
     loadUserCart,
-    initSessionId,
     loadAnonCartFromServer,
     saveAnonCartToServer,
     mergeAnonCartWithUserCart,

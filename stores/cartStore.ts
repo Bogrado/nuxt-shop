@@ -1,7 +1,6 @@
 // stores/cartStore.ts
 import type { ComputedRef } from 'vue'
 import type { Item } from '~/types'
-import debounce from 'lodash.debounce'
 import { useCartManagement } from '~/stores/cart-modules/actions/cartManagement'
 import { useSyncCart } from '~/stores/cart-modules/actions/syncCart'
 
@@ -10,7 +9,6 @@ export const useCartStore = defineStore('cart', () => {
   const user = computed(() => authStore.getUser)
   const state = reactive({
     items: [] as Item[],
-    sessionId: '', // Сессионный идентификатор для незарегистрированных пользователей
     cartLoading: false,
     loadingItems: {} as { [key: number]: boolean }, // состояние загрузки для каждого товара
   })
@@ -19,7 +17,6 @@ export const useCartStore = defineStore('cart', () => {
   const {
     loadCartProducts,
     loadUserCart,
-    initSessionId,
     mergeAnonCartWithUserCart,
     syncCartWithServer,
     loadAnonCartFromServer,
@@ -54,14 +51,11 @@ export const useCartStore = defineStore('cart', () => {
     () => (itemId: number) => state.loadingItems[itemId] || false
   )
 
-  watch(
-    totalItems,
-    debounce(async () => {
-      await syncCartWithServer()
-      console.log('worked')
-      await loadCartProducts(itemIds.value)
-    }, 300)
-  )
+  watch(totalItems, async () => {
+    await syncCartWithServer()
+    console.log('worked')
+    await loadCartProducts(itemIds.value)
+  })
 
   return {
     state,
@@ -74,7 +68,6 @@ export const useCartStore = defineStore('cart', () => {
     itemIds,
     cartLoading,
     itemLoading,
-    initSessionId,
     mergeAnonCartWithUserCart,
     addItem,
     removeItem,
