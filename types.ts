@@ -38,6 +38,7 @@ export interface User {
   id: number
   role: string
   nickName: string
+  email: string
 }
 
 export interface Credentials {

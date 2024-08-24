@@ -41,6 +41,11 @@ export const useCartStore = defineStore('cart', () => {
 
   const totalItems: ComputedRef<number> = computed(() => state.items.length)
 
+  const totalPrice = computed(() => {
+    const total = state.items.reduce((total, item) => total + item.price, 0)
+    return Number(total.toFixed(2))
+  })
+
   const itemsWithIds = computed(() =>
     state.items.map((item: { id: number }) => ({ id: item.id }))
   )
@@ -59,15 +64,8 @@ export const useCartStore = defineStore('cart', () => {
 
   return {
     state,
-    loadUserCart,
-    totalItems,
-    itemsWithIds,
     loadCartProducts,
-    products,
-    itemQuantity,
-    itemIds,
-    cartLoading,
-    itemLoading,
+    loadUserCart,
     mergeAnonCartWithUserCart,
     addItem,
     removeItem,
@@ -75,6 +73,14 @@ export const useCartStore = defineStore('cart', () => {
     clearCart,
     syncCartWithServer,
     loadAnonCartFromServer,
+    totalItems,
+    itemsWithIds,
+    products,
+    itemQuantity,
+    itemIds,
+    cartLoading,
+    itemLoading,
     user,
+    totalPrice,
   }
 })

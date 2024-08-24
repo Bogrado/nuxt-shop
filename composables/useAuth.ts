@@ -9,7 +9,8 @@ export const useAuth = () => {
     loadAnonCartFromServer,
   } = useCartStore()
   const { loadUserFavorites, clearFavorites } = useFavoriteStore()
-  const { createCartForUser, createFavoritesForUser } = useUserSetup()
+  const { createCartForUser, createFavoritesForUser, createOrdersForUser } =
+    useUserSetup()
   const { setLoading } = useLoadingStore()
   const config = useRuntimeConfig()
 
@@ -21,6 +22,7 @@ export const useAuth = () => {
       if (response?.data.id) {
         await createCartForUser(response?.data.id)
         await createFavoritesForUser(response?.data.id)
+        await createOrdersForUser(response?.data.id)
       }
     } catch (e) {
       handleFetchError(e)
