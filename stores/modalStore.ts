@@ -15,6 +15,10 @@ export const useModalStore = defineStore('modal', () => {
   }
 
   const closeModal = () => {
+    if (state.modalKey === 'login' || state.modalKey === 'register') {
+      const authStore = useAuthStore()
+      authStore.clearError()
+    }
     state.modalKey = ''
     state.isOpen = false
     state.itemId = null
