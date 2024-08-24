@@ -1,6 +1,7 @@
 export const useAuth = () => {
   const authStore = useAuthStore()
-
+  const { mergeAnonCartWithUserCart, loadUserCart } = useCartStore()
+  const { loadUserFavorites } = useFavoriteStore()
   const register = async (userData: Record<string, never>) =>
     await authStore.register(userData)
 
@@ -8,7 +9,14 @@ export const useAuth = () => {
     email: string
     password: string
     rememberMe?: boolean
-  }) => await authStore.login(credentials)
+  }) => {
+    const userData = await authStore.login(credentials)
+    if (userData) {
+      await mergeAnonCartWithUserCart()
+      await loadUserCart()
+      await loadUserFavorites()
+    }
+  }
 
   const logout = async () => await authStore.logout()
 

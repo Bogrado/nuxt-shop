@@ -15,7 +15,7 @@ const { state, error, v$, handleLogin } = useLoginForm()
 const handleSubmit = async () => {
   if (await v$.value.$validate()) {
     await handleLogin(state)
-    await emit('closeModal')
+    if (!error.value) emit('closeModal')
   }
 }
 </script>

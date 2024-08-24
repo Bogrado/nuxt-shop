@@ -66,9 +66,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
       const data: User = await $fetch('/api/auth/auth_me', { method: 'GET' })
       setUser(data)
-      await mergeAnonCartWithUserCart()
-      await loadUserCart()
-      await loadUserFavorites()
+      return data
     } catch (err: unknown) {
       const e = err as {
         data?: { message?: string }
