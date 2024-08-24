@@ -1,38 +1,19 @@
+import type { ApiResponse, Credentials, User, UserData } from '~/types'
+
 export const useAuthStore = defineStore('auth', () => {
   const config = useRuntimeConfig()
   const { setLoading } = useLoadingStore()
-  const { createCartForUser, createFavoritesForUser } = useUserSetup()
-  const {
-    loadUserCart,
-    clearCart,
-    loadAnonCartFromServer,
-    mergeAnonCartWithUserCart,
-    initSessionId,
-    state,
-  } = useCartStore()
-  const { loadUserFavorites, clearFavorites } = useFavoriteStore()
+  const { loadAnonCartFromServer, initSessionId, state } = useCartStore()
   const user = ref<User | null>(null)
   const error = ref<string | null>(null)
-
-  interface ApiResponse {
-    data: {
-      id: number
-    }
-  }
-
-  interface User {
-    id: number
-    role: string
-    nickName: string
-  }
 
   const setUser = (userData: User | null) => {
     user.value = userData
   }
 
-  const getUser = computed(() => user.value)
   const clearError = () => (error.value = null)
-  const register = async (userData: Record<string, never>) => {
+
+  const register = async (userData: UserData) => {
     clearError()
     setLoading(true)
     try {
@@ -40,8 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
         method: 'POST',
         body: userData,
       })
-      await createCartForUser(response?.data.id)
-      await createFavoritesForUser(response?.data.id)
+      return response
     } catch (err: unknown) {
       const e = err as {
         data?: { message?: string }
@@ -52,11 +32,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const login = async (credentials: {
-    email: string
-    password: string
-    rememberMe?: boolean
-  }) => {
+  const login = async (credentials: Credentials) => {
     clearError()
     setLoading(true)
     try {
@@ -83,8 +59,6 @@ export const useAuthStore = defineStore('auth', () => {
       setLoading(true)
       await $fetch('/api/auth/logout', { method: 'POST' })
       setUser(null)
-      await clearCart()
-      await clearFavorites()
     } catch (err: unknown) {
       const e = err as {
         message?: string
@@ -105,9 +79,7 @@ export const useAuthStore = defineStore('auth', () => {
           headers: useRequestHeaders(['cookie']) as HeadersInit,
         })
         setUser(data)
-        await mergeAnonCartWithUserCart()
-        await loadUserCart()
-        await loadUserFavorites()
+        return data
       } catch (e) {
         await logout()
       } finally {
@@ -118,6 +90,8 @@ export const useAuthStore = defineStore('auth', () => {
       await loadAnonCartFromServer()
     }
   }
+
+  const getUser = computed(() => user.value)
 
   return {
     user,

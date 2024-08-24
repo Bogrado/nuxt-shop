@@ -24,5 +24,30 @@ export interface Item {
   image: string
   rate: number
   count: number
+
   [key: string]: unknown // Подпись для неизвестных свойств
+}
+
+export interface ApiResponse {
+  data: {
+    id: number
+  }
+}
+
+export interface User {
+  id: number
+  role: string
+  nickName: string
+}
+
+export interface Credentials {
+  email: string
+  password: string
+  rememberMe?: boolean
+}
+
+export interface UserData {
+  password: string
+  nickName: string
+  email: string
 }

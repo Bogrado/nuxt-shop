@@ -1,5 +1,6 @@
 import { email, minLength, required, sameAs } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
+import type { UserData } from '~/types'
 
 export const useRegisterForm = () => {
   const { register, error } = useAuth()
@@ -20,7 +21,7 @@ export const useRegisterForm = () => {
     },
   }
 
-  const handleRegister = async (credentials: any) => {
+  const handleRegister = async (credentials: UserData) => {
     await register(credentials)
     if (!error.value) {
       navigateTo('/auth_user/login')

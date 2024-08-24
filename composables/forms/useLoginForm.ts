@@ -1,5 +1,6 @@
 import { email, minLength, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
+import type { Credentials } from '~/types'
 
 export const useLoginForm = () => {
   const { login, error, user } = useAuth()
@@ -16,7 +17,7 @@ export const useLoginForm = () => {
 
   const v$ = useVuelidate(rules, state)
 
-  const handleLogin = async (credentials: any) => {
+  const handleLogin = async (credentials: Credentials) => {
     await login(credentials)
     if (!error.value && user.value) {
       navigateTo('/catalog')
