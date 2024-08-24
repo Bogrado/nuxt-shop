@@ -8,6 +8,7 @@ export const useAuthStore = defineStore('auth', () => {
     loadAnonCartFromServer,
     mergeAnonCartWithUserCart,
     initSessionId,
+    state,
   } = useCartStore()
   const { loadUserFavorites, clearFavorites } = useFavoriteStore()
   const user = ref<User | null>(null)
@@ -114,8 +115,7 @@ export const useAuthStore = defineStore('auth', () => {
       } finally {
         /* empty */
       }
-    } else {
-      console.log('aboba')
+    } else if (!state.sessionId) {
       initSessionId()
       await loadAnonCartFromServer()
     }
