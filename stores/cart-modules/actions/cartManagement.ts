@@ -19,6 +19,7 @@ export const useCartManagement = () => {
         id: itemId,
       })
       await cartStore.syncCartWithServer()
+      await cartStore.loadAnonCartFromServer()
     } catch (e) {
       handleFetchError(e)
     } finally {
@@ -36,6 +37,7 @@ export const useCartManagement = () => {
         cartStore.state.items.splice(index, 1)
       }
       await cartStore.syncCartWithServer()
+      await cartStore.loadAnonCartFromServer()
     } catch (e) {
       handleFetchError(e)
     } finally {
