@@ -5,6 +5,7 @@ export const useCartManagement = () => {
   const cartStore = useCartStore()
 
   const addItem = async (itemId: number) => {
+    cartStore.dontSync = true
     cartStore.state.loadingItems[itemId] = true
     console.log(cartStore.state.loadingItems[itemId])
     try {
@@ -22,10 +23,12 @@ export const useCartManagement = () => {
       handleFetchError(e)
     } finally {
       cartStore.state.loadingItems[itemId] = false
+      cartStore.dontSync = false
     }
   }
 
   const removeItem = async (itemId: number) => {
+    cartStore.dontSync = true
     cartStore.state.loadingItems[itemId] = true
     try {
       const index = cartStore.state.items.findIndex(item => item.id === itemId)
@@ -37,6 +40,7 @@ export const useCartManagement = () => {
       handleFetchError(e)
     } finally {
       cartStore.state.loadingItems[itemId] = false
+      cartStore.dontSync = true
     }
   }
 

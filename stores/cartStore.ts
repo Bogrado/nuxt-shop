@@ -12,6 +12,7 @@ export const useCartStore = defineStore('cart', () => {
     cartLoading: false,
     loadingItems: {} as { [key: number]: boolean }, // состояние загрузки для каждого товара
   })
+  const dontSync = ref(false)
 
   const { addItem, removeItem, removeAll, clearCart } = useCartManagement()
   const {
@@ -57,13 +58,15 @@ export const useCartStore = defineStore('cart', () => {
   )
 
   watch(totalItems, async () => {
+    if (dontSync.value) return
     await syncCartWithServer()
     console.log('worked')
-    await loadCartProducts(itemIds.value)
+    // await loadCartProducts(itemIds.value)
   })
 
   return {
     state,
+    dontSync,
     loadCartProducts,
     loadUserCart,
     mergeAnonCartWithUserCart,

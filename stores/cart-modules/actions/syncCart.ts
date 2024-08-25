@@ -9,19 +9,6 @@ export const useSyncCart = () => {
   const user = computed(() => authStore.getUser)
   const sessionId = computed(() => authStore.getAnonSessionId)
 
-  // const initSessionId = () => {
-  //   if (!cartStore.state.sessionId && import.meta.client && !user?.value?.id) {
-  //     const storedSessionId = localStorage.getItem(config.public.anonName)
-  //     if (storedSessionId) {
-  //       cartStore.state.sessionId = storedSessionId
-  //     } else {
-  //       // Генерация нового уникального sessionId
-  //       cartStore.state.sessionId = crypto.randomUUID()
-  //       localStorage.setItem(config.public.anonName, cartStore.state.sessionId)
-  //     }
-  //   }
-  // }
-
   const loadCartProducts = async (itemIds: number[] = []) => {
     cartStore.state.cartLoading = true
     try {
@@ -115,6 +102,7 @@ export const useSyncCart = () => {
           method: 'PATCH',
           body: { user_id: user.value.id, items: cartStore.itemsWithIds },
         })
+        await loadCartProducts(cartStore.itemIds)
       } catch (e) {
         handleFetchError(e)
       } finally {
