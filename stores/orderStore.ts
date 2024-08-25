@@ -8,7 +8,7 @@ export const useOrderStore = defineStore('order', () => {
   const state = reactive({
     // Нужно ли сокращать или ненужно? Вроде, всё важное
     status: 'created',
-    userId: authStore.getUser?.id || '',
+    userId: computed(() => authStore.getUser?.id),
     firstName: '',
     lastName: '',
     email: <string | undefined>authStore.getUser?.email || '',
@@ -58,7 +58,6 @@ export const useOrderStore = defineStore('order', () => {
       state.created_at = new Date().toISOString()
       const orderData = {
         user: state.email,
-        user_id: state.userId,
         status: state.status,
         created_at: state.created_at,
         orderDetails: state.orderDetails,
@@ -67,19 +66,39 @@ export const useOrderStore = defineStore('order', () => {
         fullName: fullName.value,
       }
       await $fetch(`/api/orders/user_items`, {
-        method: 'PATCH',
-        body: { user_id: state.userId, items: state.orderDetails },
+        method: 'POST',
+        body: { user_id: state.userId, item: orderData },
       })
       state.error = ''
       isCreated.value = true
       console.log('Заказ успешно отправлен:', orderData)
       await cartStore.clearCart()
+      clearState()
       setTimeout(() => {
         isCreated.value = false
       }, 3000)
     } catch (error) {
       state.error = 'Ошибка при отправке заказа: ' + error.message
     }
+  }
+
+  const clearState = () => {
+    state.status = 'created'
+    state.firstName = ''
+    state.lastName = ''
+    state.email = <string | undefined>authStore.getUser?.email || ''
+    state.country = ''
+    state.city = ''
+    state.postalCode = ''
+    state.addressLine1 = ''
+    state.houseNumber = ''
+    state.apartmentNumber = ''
+    state.saveAddress = false
+    state.agreeToTerms = false
+    state.created_at = ''
+    state.orderDetails = <{ id: number }[]>[]
+    state.totalPrice = 0
+    state.error = ''
   }
 
   const createdSuccess = computed(() => isCreated.value)

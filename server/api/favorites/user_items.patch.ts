@@ -1,4 +1,4 @@
-// server\api\cart\user_items.patch.ts
+// server/api/favorites/user_items.post.ts
 import { handleFetchError } from '~/utils/handleFetchError'
 import type { H3Event } from 'h3'
 
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event: H3Event = {} as H3Event) => {
   }>(event)
 
   try {
-    return await $fetch(`${config.public.baseUrl}/orders/${user_id}`, {
+    return await $fetch(`${config.public.baseUrl}/favorites/${user_id}`, {
       method: 'PATCH',
       body: { items },
     })

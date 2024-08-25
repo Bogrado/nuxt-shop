@@ -1,18 +1,18 @@
-// server/api/orders/user_items.patch.ts
+// server/api/orders/user_items.post.ts
 import { handleFetchError } from '~/utils/handleFetchError'
 import type { H3Event } from 'h3'
 
 export default defineEventHandler(async (event: H3Event = {} as H3Event) => {
   const config = useRuntimeConfig()
-  const { user_id, items } = await readBody<{
+  const { user_id, item } = await readBody<{
     user_id: number
-    items: []
+    item: object
   }>(event)
 
   try {
-    return await $fetch(`${config.public.baseUrl}/favorites/${user_id}`, {
-      method: 'PATCH',
-      body: { items },
+    return await $fetch(`${config.public.baseUrl}/orders/`, {
+      method: 'POST',
+      body: { user_id, ...item },
     })
   } catch (err) {
     handleFetchError(err)

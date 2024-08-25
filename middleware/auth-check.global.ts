@@ -1,4 +1,4 @@
-const protectedRoutes = ['/profile', '/favorites']
+const protectedRoutes = ['/profile', '/favorites', '/cart/checkout']
 
 export default defineNuxtRouteMiddleware(async (to, _from) => {
   const { user, fetchUser } = useAuth()

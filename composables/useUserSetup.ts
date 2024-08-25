@@ -21,20 +21,8 @@ export const useUserSetup = () => {
     }
   }
 
-  const createOrdersForUser = async (userId: number) => {
-    try {
-      await $fetch('/api/orders/create', {
-        method: 'POST',
-        body: { user_id: userId, items: [] },
-      })
-    } catch (err) {
-      console.error('Error creating orders for user:', err)
-    }
-  }
-
   return {
     createCartForUser,
     createFavoritesForUser,
-    createOrdersForUser,
   }
 }

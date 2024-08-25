@@ -1,4 +1,4 @@
-// server\api\cart\user_items.patch.ts
+// server\api\cart\user_items.post.ts
 import { handleFetchError } from '~/utils/handleFetchError'
 import type { H3Event } from 'h3'
 

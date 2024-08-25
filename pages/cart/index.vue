@@ -10,7 +10,7 @@ const totalItems = computed(() => cartStore.totalItems)
     <!-- Заголовок страницы -->
     <pages-v-page-header title="Корзина" />
     <pages-cart-v-empty v-if="!products.length" />
-    <div v-auto-animate>
+    <div v-else v-auto-animate>
       <!--      <v-preloader class="w-32 h-32" v-if="cartStore.cartLoading" />-->
       <div
         class="max-w-screen-2xl mx-auto flex flex-col lg:flex-row lg:space-x-8"
@@ -31,12 +31,13 @@ const totalItems = computed(() => cartStore.totalItems)
             </div>
           </template>
           <template #footer>
-            <button
-              class="bg-gray-700 text-white py-2 px-4 rounded hover:bg-green-500 transition duration-300 active:bg-green-700 focus:outline-none w-full"
-              @click="handleAccountCheck"
-            >
-              Перейти к оформлению
-            </button>
+            <nuxt-link to="/cart/checkout">
+              <button
+                class="bg-gray-700 text-white py-2 px-4 rounded hover:bg-green-500 transition duration-300 active:bg-green-700 focus:outline-none w-full"
+              >
+                Перейти к оформлению
+              </button>
+            </nuxt-link>
           </template>
         </common-v-summary>
       </div>
