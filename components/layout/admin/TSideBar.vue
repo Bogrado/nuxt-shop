@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <aside class="w-64 bg-gray-800 shadow-lg flex flex-col h-screen p-5">
+  <aside class="w-64 bg-gray-800 shadow-lg flex flex-col p-5">
     <nav class="space-y-2">
       <h2 class="text-xl text-slate-50 font-semibold mb-5">Admin Panel</h2>
       <NuxtLink
