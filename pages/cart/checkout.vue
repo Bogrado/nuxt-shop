@@ -1,16 +1,7 @@
 <template>
   <div v-auto-animate>
     <h1 class="text-3xl font-bold mb-4 text-center">Оформление заказа</h1>
-    <div v-if="createdSuccess" class="text-center text-gray-700">
-      Заказ размещен, вернуться на главную
-      <nuxt-link to="/">
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-        >
-          Вернуться на главную
-        </button>
-      </nuxt-link>
-    </div>
+    <pages-checkout-v-created v-if="createdSuccess" />
     <div
       v-else-if="cartStore.products.length === 0"
       class="text-center text-gray-700"
