@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-100">
+  <div class="min-h-screen flex flex-col bg-gray-100" v-auto-animate>
     <!-- Header -->
     <layout-t-header @toggle-menu="toggleMenu" />
     <div class="flex flex-grow">
@@ -12,6 +12,7 @@
     </div>
     <!-- Footer -->
     <layout-t-footer />
+    <common-v-modal />
   </div>
 </template>
 

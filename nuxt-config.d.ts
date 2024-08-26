@@ -23,10 +23,10 @@ declare module '@nuxt/schema' {
         cookieName?: string
         cookieExpires?: number
         cookieRememberMeExpires?: number
-        redisUrl?: string
-        redisPort?: number
-        redisPassword?: string
-      }
+      },
+      redisUrl?: string
+      redisPort?: number
+      redisPassword?: string
     }
   }
 }

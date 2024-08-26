@@ -7,7 +7,6 @@ export default defineEventHandler(async (event: H3Event = {} as H3Event) => {
   const query = getQuery(event)
 
   try {
-    console.log(query.user_id)
     return await $fetch(`${config.public.baseUrl}/orders/${query.user_id}`, {
       method: 'GET',
       params: query,
