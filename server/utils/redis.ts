@@ -1,9 +1,10 @@
 import Redis from 'ioredis'
+const config = useRuntimeConfig()
 
 const redis = new Redis({
-  host: '95.164.2.168', // IP адрес удаленного сервера, крутится в докере
-  port: 6379, // Порт Redis (по умолчанию)
-  password: '111241698',
+  host: config.public.redisUrl, // IP адрес удаленного сервера, крутится в докере
+  port: config.public.redisPort, // Порт Redis (по умолчанию)
+  password: config.public.redisPassword,
 })
 
 export default redis

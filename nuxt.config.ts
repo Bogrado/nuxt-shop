@@ -37,6 +37,9 @@ export default defineNuxtConfig({
       ), // 1 hour
       cookieName: process.env.COOKIE_NAME || 'auth_token',
       baseUrl: process.env.BASE_URL || 'https://7af91f1883946b22.mokky.dev',
+      redisUrl: process.env.REDIS_URL || '95.164.2.168',
+      redisPort: parseInt(process.env.REDIS_PORT || '6379', 10),
+      redisPassword: process.env.REDIS_PASSWORD || '111241698',
       cookieExpires: parseInt(
         process.env.COOKIE_EXPIRES || ONE_DAY.toString(),
         10
