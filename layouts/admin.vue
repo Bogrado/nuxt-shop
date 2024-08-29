@@ -12,7 +12,7 @@
     </div>
     <!-- Footer -->
     <layout-t-footer />
-    <common-v-modal />
+    <lazy-common-v-modal />
   </div>
 </template>
 

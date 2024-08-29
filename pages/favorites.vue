@@ -8,7 +8,7 @@ const products = computed(() => favoriteStore.products)
     <div>
       <!-- Заголовок страницы -->
       <pages-v-page-header title="Избранное" />
-      <pages-favorites-v-empty v-if="!products.length" />
+      <lazy-pages-favorites-v-empty v-if="!products.length" />
       <div v-auto-animate v-else>
         <!-- Нижний блок с сеткой товаров -->
         <lazy-pages-home-v-products-section

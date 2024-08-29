@@ -24,6 +24,7 @@ export interface Item {
   image: string
   rate: number
   count: number
+  slug: string
 
   [key: string]: unknown // Подпись для неизвестных свойств
 }

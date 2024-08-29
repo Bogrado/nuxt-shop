@@ -8,7 +8,7 @@ export const useProductsStore = defineStore('products', () => {
 
   const loadProducts = async (): Promise<Item[]> => {
     try {
-      let query = '_select=id,title,price,category,image,rate,count'
+      let query = '_select=id,title,slug,price,category,image,rate,count'
       if (searchQuery.value) {
         query += `&title=*${searchQuery.value}*`
       }

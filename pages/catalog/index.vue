@@ -2,7 +2,7 @@
   <div v-auto-animate>
     <pages-v-page-header title="Домашняя страница" />
     <!-- Нижний блок с сеткой товаров -->
-    <pages-home-v-toolbar />
+    <lazy-pages-home-v-toolbar />
     <lazy-pages-home-v-products-section
       v-if="status === 'success'"
       :products="products"
