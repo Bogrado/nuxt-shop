@@ -9,6 +9,7 @@ import { useVuelidate } from '@vuelidate/core'
 
 export const useProductForm = (emit: (arg0: string) => void) => {
   const isEditing = ref(false)
+  const { loadProducts } = useItemsManagerStore()
   const state = reactive({
     id: null,
     title: '',
@@ -56,7 +57,14 @@ export const useProductForm = (emit: (arg0: string) => void) => {
       } else {
         await $fetch('/api/data/item', {
           method: 'POST',
-          body: { item: { ...state, rating: 0, count: 0 } },
+          body: {
+            item: {
+              ...state,
+              rating: 0,
+              count: 0,
+              slug: generateSlug(state.title),
+            },
+          },
         })
       }
       emit('productSaved')
@@ -65,6 +73,8 @@ export const useProductForm = (emit: (arg0: string) => void) => {
     } catch (err) {
       console.error('Ошибка при сохранении:', err)
       error.value = 'Ошибка при сохранении данных'
+    } finally {
+      await loadProducts()
     }
   }
 

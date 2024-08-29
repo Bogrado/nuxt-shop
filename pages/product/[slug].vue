@@ -36,7 +36,7 @@
               <div class="flex justify-between">
                 <div class="text-lg font-bold mb-4">Цена:</div>
                 <div class="text-lg font-bold mb-4">
-                  {{ data.price * quantity }} ₽
+                  {{ quantity ? data.price * quantity : data.price }} ₽
                 </div>
               </div>
             </template>
@@ -57,11 +57,12 @@
 </template>
 
 <script setup>
-const route = useRoute()
-const fullSlug = route.params.slug || ''
+definePageMeta({
+  middleware: 'check-product-id',
+})
 
-const slugParts = fullSlug.split('-')
-const id = parseInt(slugParts.pop())
+const route = useRoute()
+const id = parseInt(route.params.slug.split('-').pop())
 
 const { data, status } = await useFetch('/api/data/item', {
   params: { id },
