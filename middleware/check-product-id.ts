@@ -1,6 +1,7 @@
 export default defineNuxtRouteMiddleware((to, _from) => {
   const fullSlug = to.params.slug || ''
-  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const slugParts = fullSlug.split('-')
   const id = parseInt(slugParts.pop())
 

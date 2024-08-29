@@ -1,6 +1,9 @@
 <template>
   <div v-auto-animate>
     <common-v-preloader v-if="status === 'pending'" />
+    <div v-else-if="error">
+      <pages-error-v-error :error="error" />
+    </div>
     <div v-else>
       <pages-v-page-header :title="data.title" />
 
@@ -11,7 +14,7 @@
           <!-- Левая колонка с изображением продукта -->
           <lazy-pages-product-v-image
             :image="data.image"
-            :isFavorite="isFavorite"
+            :is-favorite="isFavorite"
             @handle-favorite="favoriteStore.toggleFavorite(data.id)"
           />
           <!-- Центральная колонка с информацией о продукте -->
@@ -42,7 +45,7 @@
             </template>
             <template #footer>
               <common-v-cart-manager
-                :isInCart="isInCart"
+                :is-in-cart="isInCart"
                 :loading="loading"
                 :quantity="quantity"
                 @on-add-to-cart="cartStore.addItem(data.id)"
@@ -57,14 +60,9 @@
 </template>
 
 <script setup>
-definePageMeta({
-  middleware: 'check-product-id',
-})
-
 const route = useRoute()
 const id = parseInt(route.params.slug.split('-').pop())
-
-const { data, status } = await useFetch('/api/data/item', {
+const { data, status, error } = await useFetch('/api/data/item', {
   params: { id },
 })
 
