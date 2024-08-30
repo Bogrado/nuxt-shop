@@ -15,7 +15,7 @@
           :class="{ 'fill-red-700': isFavorite }"
         />
       </div>
-      <nuxt-link :to="`/product/${product.slug}-${product.id}`">
+      <nuxt-link :to="`/product/${product.slug}_${product.id}`">
         <button
           class="absolute bottom-0 left-0 w-full bg-black bg-opacity-40 text-white py-1 text-center opacity-0 group-hover:opacity-70 transition-opacity duration-300 backdrop-blur-sm hover:bg-opacity-75 active:bg-opacity-90 rounded-b-md"
         >
@@ -24,7 +24,7 @@
       </nuxt-link>
     </div>
     <div class="mt-4">
-      <nuxt-link :to="`/product/${product.slug}-${product.id}`">
+      <nuxt-link :to="`/product/${product.slug}_${product.id}`">
         <h3
           class="text-lg font-bold line-clamp-1 text-ellipsis overflow-hidden"
         >

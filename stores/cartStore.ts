@@ -60,8 +60,6 @@ export const useCartStore = defineStore('cart', () => {
   watch(totalItems, async () => {
     if (dontSync.value) return
     await syncCartWithServer()
-    console.log('worked')
-    // await loadCartProducts(itemIds.value)
   })
 
   return {

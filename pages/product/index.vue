@@ -6,5 +6,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>hello</div>
+  <lazy-common-v-preloader />
 </template>

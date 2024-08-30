@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <div>
-    <nuxt-link :to="`/product/${product.slug}-${product.id}`">
+    <nuxt-link :to="`/product/${product.slug}_${product.id}`">
       <h3 class="text-lg font-bold">{{ product.title }}</h3>
     </nuxt-link>
     <p class="text-gray-700">Категория: {{ product.category }}</p>

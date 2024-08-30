@@ -29,6 +29,20 @@ export interface Item {
   [key: string]: unknown // Подпись для неизвестных свойств
 }
 
+export interface FullItem {
+  id: number
+  title: string
+  price: number
+  category: string
+  image: string
+  rate: number
+  count: number
+  slug: string
+  description: string
+
+  [key: string]: unknown // Подпись для неизвестных свойств
+}
+
 export interface ApiResponse {
   data: {
     id: number

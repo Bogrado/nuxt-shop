@@ -114,7 +114,6 @@ export const useSyncCart = () => {
   }
 
   const mergeAnonCartWithUserCart = async () => {
-    console.log('mergeAnonCartWithUserCart')
     try {
       await loadAnonCartFromServer()
 

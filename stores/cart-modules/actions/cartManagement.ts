@@ -7,7 +7,6 @@ export const useCartManagement = () => {
   const addItem = async (itemId: number) => {
     cartStore.dontSync = true
     cartStore.state.loadingItems[itemId] = true
-    console.log(cartStore.state.loadingItems[itemId])
     try {
       cartStore.state.items.push({
         category: '',
@@ -16,6 +15,7 @@ export const useCartManagement = () => {
         price: 0,
         rate: 0,
         title: '',
+        slug: '',
         id: itemId,
       })
       await cartStore.syncCartWithServer()

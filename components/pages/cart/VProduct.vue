@@ -28,7 +28,7 @@ const itemTotalAmount = computed(() =>
       class="border-b py-4 flex flex-col md:flex-row justify-between items-start md:items-center"
     >
       <div class="flex items-center">
-        <nuxt-link :to="`/product/${product.slug}-${product.id}`">
+        <nuxt-link :to="`/product/${product.slug}_${product.id}`">
           <pages-cart-v-product-image :image="props.product.image" />
         </nuxt-link>
         <div class="ml-4">

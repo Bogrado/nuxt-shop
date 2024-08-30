@@ -1,10 +1,7 @@
 <template>
   <div v-auto-animate>
     <common-v-preloader v-if="status === 'pending'" />
-    <div v-else-if="error">
-      <pages-error-v-error :error="error" />
-    </div>
-    <div v-else>
+    <div v-if="status === 'success'">
       <pages-v-page-header :title="data.title" />
 
       <div class="container mx-auto p-4 bg-gray-200 rounded-lg">
@@ -60,11 +57,7 @@
 </template>
 
 <script setup>
-const route = useRoute()
-const id = parseInt(route.params.slug.split('-').pop())
-const { data, status, error } = await useFetch('/api/data/item', {
-  params: { id },
-})
+const { data, status } = await useFetchProduct()
 
 const cartStore = useCartStore()
 const favoriteStore = useFavoriteStore()
