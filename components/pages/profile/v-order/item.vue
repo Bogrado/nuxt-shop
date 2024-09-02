@@ -1,9 +1,21 @@
+<script setup lang="ts">
+defineProps({
+  image: {
+    type: String,
+    required: true,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+})
+</script>
 <template>
-  <div>
+  <div v-auto-animate class="border border-gray-200 rounded-lg p-1 shadow-2xl">
     <img
-      src="https://via.placeholder.com/80"
+      :src="image"
       alt="Product Image"
-      class="w-10 h-10 sm:w-20 sm:h-20 object-cover rounded"
+      class="w-10 h-10 sm:w-20 sm:h-20 object-contain rounded-lg"
     />
   </div>
 </template>

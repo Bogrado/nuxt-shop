@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import type { OrderData } from '~/types'
 
-defineProps<{
+const props = defineProps<{
   order: OrderData
 }>()
+const date = computed(() => props.order.created_at)
+const formattedDate = new Date(date.value).toLocaleDateString('ru-RU', {
+  day: 'numeric',
+  month: 'long',
+})
 </script>
 <template>
   <div class="bg-gray-50 p-4 mb-4 rounded-lg shadow-sm">
     <div class="flex justify-between items-center">
       <div>
-        <h3 class="text-lg font-medium">Заказ от 28 августа</h3>
+        <h3 class="text-lg font-medium">Заказ от {{ formattedDate }}</h3>
         <a href="#" class="text-blue-500 text-sm"> # {{ order.id }}</a>
       </div>
       <div class="text-lg font-semibold text-right">
