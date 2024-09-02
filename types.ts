@@ -67,3 +67,19 @@ export interface UserData {
   nickName: string
   email: string
 }
+
+export interface OrderDetails {
+  id: number
+}
+
+export interface OrderData {
+  user_id: number
+  user: string
+  status: string
+  created_at: string
+  orderDetails: OrderDetails[]
+  totalPrice: number
+  address: string
+  fullName: string
+  id: number
+}
