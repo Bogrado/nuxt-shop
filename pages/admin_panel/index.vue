@@ -2,11 +2,6 @@
 definePageMeta({
   layout: 'admin',
 })
-
-const router = useRouter()
-onMounted(() => {
-  router.push('/admin_panel/dashboard')
-})
 </script>
 
 <template>

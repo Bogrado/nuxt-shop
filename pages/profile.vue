@@ -13,11 +13,11 @@ const handleLogout = async () => {
 }
 
 // Проверяем маршрут и переходим к заказам, если маршрут основной
-onMounted(() => {
-  if (router.currentRoute.value.path === '/profile') {
-    router.push('/profile/orders')
-  }
-})
+// onMounted(() => {
+//   if (router.currentRoute.value.path === '/profile') {
+//     router.push('/profile/orders')
+//   }
+// })
 </script>
 
 <template>

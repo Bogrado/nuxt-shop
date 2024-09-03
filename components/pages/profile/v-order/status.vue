@@ -25,11 +25,12 @@ const statusClasses = computed(
 
 <template>
   <div class="mb-4 md:mb-0">
-    <p class="text-sm">
+    <p class="font-semibold">
       Статус
-      <span :class="`text-xs px-2 py-1 rounded ${statusClasses}`">{{
-        statusText
-      }}</span>
+      <span
+        :class="`text-xs font-light px-2 py-1 rounded items-center text-center ${statusClasses}`"
+        >{{ statusText }}</span
+      >
     </p>
   </div>
 </template>

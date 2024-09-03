@@ -50,4 +50,11 @@ export default defineNuxtConfig({
     redisPort: parseInt(process.env.REDIS_PORT || '6379', 10),
     redisPassword: process.env.REDIS_PASSWORD || '111241698',
   },
+
+  routeRules: {
+    '/profile': { redirect: '/profile/orders' },
+    '/product': { redirect: '/catalog' },
+    '/admin_panel': { redirect: '/admin_panel/dashboard' },
+    '/': { redirect: '/catalog' },
+  },
 })

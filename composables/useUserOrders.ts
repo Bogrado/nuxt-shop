@@ -12,7 +12,7 @@ export const useUserOrders = () => {
         const response = await $fetch<Item[]>('/api/data/items', {
           params: {
             id: ids,
-            _select: 'id,slug,image',
+            _select: 'id,slug,image,title,category',
           },
         })
         products.value = denormalizeItems(response, ids)
