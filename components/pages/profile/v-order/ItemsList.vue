@@ -1,34 +1,11 @@
 <script setup lang="ts">
-import type { Item, OrderDetails } from '~/types'
-import { denormalizeCartItems } from '~/utils/denormalizeCartItems'
-
+import type { OrderDetails } from '~/types'
 const props = defineProps<{
   items: OrderDetails[]
 }>()
-const loading = ref(false)
-const products = ref<Item[] | null>(null)
-const itemsId = computed(() => props.items.map(item => item.id))
-const loadOrderProducts = async () => {
-  if (itemsId.value.length > 0) {
-    loading.value = true
-    console.log(loading.value)
-    try {
-      const response = await $fetch<Item[]>('/api/data/items', {
-        params: {
-          id: itemsId.value,
-          _select: 'id,slug,image',
-        },
-      })
-      products.value = denormalizeCartItems(response, itemsId.value)
-    } catch (e) {
-      handleFetchError(e)
-    } finally {
-      loading.value = false
-      console.log(loading.value)
-    }
-  }
-}
+const { products, loading, loadOrderProducts } = useUserOrders()
 
+const itemIds = computed(() => props.items.map(item => item.id))
 const visibleItems = computed(() =>
   products.value ? products.value.slice(0, 3) : []
 )
@@ -36,7 +13,7 @@ const remainingItemsCount = computed(() =>
   products.value ? products.value.length - 3 : 0
 )
 const getLoading = computed(() => loading.value || !products.value)
-onMounted(() => loadOrderProducts())
+onMounted(() => loadOrderProducts(itemIds.value))
 </script>
 <template>
   <div class="gap-2 flex flex-wrap sm:flex-nowrap">

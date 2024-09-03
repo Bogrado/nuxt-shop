@@ -6,19 +6,13 @@ definePageMeta({
 })
 
 const { logout, user } = useAuth()
-const loadingStore = useLoadingStore()
-const modalStore = useModalStore()
-const loading = computed(() => loadingStore.loading)
 
 const handleLogout = async () => {
   await logout()
   navigateTo('/catalog')
 }
 
-const { data, status } = useFetch<OrderData[]>('/api/orders/orders', {
-  params: { user_id: user.value?.id },
-})
-console.log(data.value)
+const { data, status } = useProfile()
 const orders = computed(() => (data.value as OrderData[]) || [])
 </script>
 
@@ -33,7 +27,7 @@ const orders = computed(() => (data.value as OrderData[]) || [])
           <!-- User Image -->
           <lazy-pages-profile-v-image />
           <!-- User Info -->
-          <lazy-pages-profile-v-info />
+          <lazy-pages-profile-v-info @handle-logout="handleLogout" />
         </div>
 
         <!-- Orders Section -->

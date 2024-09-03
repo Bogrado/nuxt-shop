@@ -1,6 +1,6 @@
 // stores/cart-modules/syncCart.ts
 import type { CartData, Item } from '~/types'
-import { denormalizeCartItems } from '~/utils/denormalizeCartItems'
+import { denormalizeItems } from '~/utils/denormalizeItems'
 
 export const useSyncCart = () => {
   const config = useRuntimeConfig()
@@ -24,7 +24,7 @@ export const useSyncCart = () => {
           }
         )
 
-        cartStore.state.items = denormalizeCartItems(fetchedProducts, itemIds)
+        cartStore.state.items = denormalizeItems(fetchedProducts, itemIds)
       } else {
         cartStore.state.items = []
       }

@@ -13,7 +13,10 @@ export const useFetchProduct = async () => {
   })
 
   if (error.value) {
-    throw createError({ statusCode: error.value.statusCode, message: error.value.message })
+    throw createError({
+      statusCode: error.value.statusCode,
+      message: error.value.message,
+    })
   }
 
   if (data.value && data.value.slug !== route.params.slug) {
@@ -23,5 +26,5 @@ export const useFetchProduct = async () => {
     })
   }
 
-  return { data, status, error, }
+  return { data, status, error }
 }

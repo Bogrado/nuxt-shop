@@ -7,7 +7,7 @@ import type { Item } from '~/types'
  * @param itemIds - массив id товаров в корзине, который содержит дубли id товаров в зависимости от их количества
  * @returns массив товаров, где каждый товар дублируется в зависимости от его количества в корзине
  */
-export function denormalizeCartItems(
+export function denormalizeItems(
   fetchedProducts: Item[],
   itemIds: number[]
 ): Item[] {
