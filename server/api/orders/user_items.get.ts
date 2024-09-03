@@ -9,7 +9,7 @@ export default defineEventHandler(async (event: H3Event = {} as H3Event) => {
   try {
     return await $fetch(`${config.public.baseUrl}/orders/${query.user_id}`, {
       method: 'GET',
-      params: query,
+      params: query ? query : {},
     })
   } catch (err) {
     handleFetchError(err)

@@ -1,0 +1,22 @@
+<script setup lang="ts">
+import type { OrderData } from '~/types'
+
+const { data, status } = useProfile()
+const orders = computed(() => (data.value as OrderData[]) || [])
+</script>
+<template>
+  <div v-auto-animate>
+    <h2
+      class="text-2xl text-white font-semibold mb-4 mt-4 p-4 bg-slate-800 rounded-lg"
+    >
+      Заказы
+    </h2>
+    <common-v-preloader v-if="status === 'pending'" />
+    <lazy-pages-profile-v-orders-list
+      v-if="status === 'success'"
+      :orders="orders"
+    />
+  </div>
+</template>
+
+<style scoped></style>

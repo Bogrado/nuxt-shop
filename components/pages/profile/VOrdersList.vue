@@ -14,6 +14,7 @@ const reversedOrders = computed(() => [...props.orders].reverse())
         v-for="order in reversedOrders"
         :key="order.id"
         :order="order"
+        @click="navigateTo(`/profile/order-${order.id}`)"
       />
     </div>
   </div>

@@ -13,7 +13,7 @@ defineEmits(['handleLogout'])
         class="relative flex flex-col items-center group"
         @click="$emit('handleLogout')"
       >
-        <lazy-icons-v-logout class="w-8 h-8 fill-current" />
+        <icons-v-logout class="w-8 h-8 fill-current" />
         <span
           class="absolute top-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-xs bg-gray-200 text-gray-800 py-1 px-2 rounded-lg shadow-lg border border-gray-800"
         >

@@ -5,10 +5,7 @@ const props = defineProps<{
   order: OrderData
 }>()
 const date = computed(() => props.order.created_at)
-const formattedDate = new Date(date.value).toLocaleDateString('ru-RU', {
-  day: 'numeric',
-  month: 'long',
-})
+const formattedDate = formatDate(date.value)
 </script>
 <template>
   <div class="bg-gray-50 p-4 mb-4 rounded-lg shadow-sm">
