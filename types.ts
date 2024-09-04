@@ -54,6 +54,8 @@ export interface User {
   role: string
   nickName: string
   email: string
+  firstName: string
+  lastName: string
 }
 
 export interface Credentials {

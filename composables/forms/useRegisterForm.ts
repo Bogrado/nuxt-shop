@@ -1,4 +1,10 @@
-import { email, minLength, required, sameAs } from '@vuelidate/validators'
+import {
+  email,
+  maxLength,
+  minLength,
+  required,
+  sameAs,
+} from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import type { UserData } from '~/types'
 
@@ -12,7 +18,7 @@ export const useRegisterForm = () => {
   })
 
   const rules = {
-    nickName: { required, minLength: minLength(3) },
+    nickName: { required, minLength: minLength(3), maxLength: maxLength(10) },
     email: { required, email },
     password: { required, minLength: minLength(5) },
     confirmPassword: {

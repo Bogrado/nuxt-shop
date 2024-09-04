@@ -83,6 +83,23 @@ export const useAuthStore = defineStore('auth', () => {
     anonSessionId.value = ''
   }
 
+  const patchUser = async () => {
+    try {
+      return <ApiResponse>await $fetch<ApiResponse>('/api/auth/user', {
+        method: 'PATCH',
+        params: {
+          id: user.value?.id,
+        },
+        body: user.value,
+      })
+    } catch (err: unknown) {
+      const e = err as {
+        data?: { message?: string }
+      }
+      error.value = e.data?.message || 'Registration failed'
+    }
+  }
+
   const getUser = computed(() => user.value)
   const getAnonSessionId = computed(() => anonSessionId.value)
 
@@ -100,5 +117,6 @@ export const useAuthStore = defineStore('auth', () => {
     removeSessionId,
     getUser,
     getAnonSessionId,
+    patchUser,
   }
 })
