@@ -11,13 +11,10 @@ const totalItems = computed(() => cartStore.totalItems)
     <pages-v-page-header title="Корзина" />
     <pages-cart-v-empty v-if="!products.length" />
     <div v-else v-auto-animate>
-      <!--      <v-preloader class="w-32 h-32" v-if="cartStore.cartLoading" />-->
       <div
         class="max-w-screen-2xl mx-auto flex flex-col lg:flex-row lg:space-x-8"
       >
-        <!-- Левая колонка - товары в корзине -->
         <pages-cart-v-list :products="products" />
-        <!--         Правая колонка - информация о заказе -->
         <common-v-summary>
           class="max-w-80" :total-price="totalPrice">
           <template #header>

@@ -21,7 +21,7 @@ export const useProductsStore = defineStore('products', () => {
       items.value = response
       return response
     } catch (error) {
-      console.error(error)
+      handleFetchError(error)
       return []
     }
   }

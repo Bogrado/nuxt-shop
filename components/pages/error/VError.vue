@@ -16,18 +16,21 @@ defineProps({
     />
     <h1 class="text-2xl font-semibold mb-2">OOPS Page Not Found...</h1>
     <p class="text-gray-600 mb-4">
-      {{ error.statusCode }}
+      {{ error.statusCode || 'unexpected error' }}
     </p>
     <p class="text-gray-600 mb-4">
       {{ error.message }}
     </p>
-    <NuxtLink to="/">
-      <button
-        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition duration-300"
-      >
-        Перейти в каталог
-      </button>
-    </NuxtLink>
+    <div class="flex justify-center gap-4">
+      <NuxtLink to="/">
+        <button
+          class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition duration-300"
+        >
+          Перейти в каталог
+        </button>
+      </NuxtLink>
+      <slot name="button" />
+    </div>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { OrderData } from '~/types'
 
-const { data, status } = useProfile()
+const { data, status, error } = useProfile()
 const orders = computed(() => (data.value as OrderData[]) || [])
 </script>
 <template>
@@ -15,6 +15,10 @@ const orders = computed(() => (data.value as OrderData[]) || [])
     <lazy-pages-profile-v-orders-list
       v-if="status === 'success'"
       :orders="orders"
+    />
+    <lazy-pages-error-v-error
+      v-if="error || status === 'error'"
+      :error="error"
     />
   </div>
 </template>
