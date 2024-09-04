@@ -1,23 +1,24 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
+import { useUserOrders } from '~/composables/useUserOrders'
 
-const modalStore = useModalStore()
+const { patchOrderStatus, loading } = useUserOrders()
 const { user } = useAuth()
 const route = useRoute()
 const orderId = route.params.id
-
+const confirm = ref(false)
 const { data, status, refresh } = await useFetch('/api/orders/orders', {
   params: { user_id: user.value?.id, id: orderId },
 })
 
 const handleCancelOrder = async () => {
-  modalStore.openModal('cancelOrder', order.value?.id)
-  setTimeout(() => {
-    refresh()
-  }, 3500)
+  await patchOrderStatus(order.value.id, 'canceled')
+  await refresh()
+  confirm.value = false
 }
 const order = computed(() => data.value?.[0])
 const formattedDate = computed(() => formatDate(order.value?.created_at))
+const isLoading = computed(() => loading.value)
 </script>
 
 <template>
@@ -44,40 +45,30 @@ const formattedDate = computed(() => formatDate(order.value?.created_at))
           >
           <template #body>
             <div class="mt-2">
-              <div class="font-semibold flex gap-2">
-                Товары:
-                <p class="text-green-500">{{ order?.totalPrice }}₽</p>
-              </div>
-              <div class="font-semibold flex gap-2">
-                Доставка:
-                <p class="text-green-500">Бесплатно</p>
-              </div>
-              <div class="font-semibold flex gap-2">
-                Итого:
-                <p class="text-green-500">{{ order?.totalPrice }} ₽</p>
-              </div>
+              <pages-order-v-summary
+                info-key="Товары"
+                :info="String(order.totalPrice)"
+              />
+              <pages-order-v-summary info-key="Доставка" info="Бесплатно" />
+              <pages-order-v-summary
+                info-key="Итого"
+                :info="String(order.totalPrice)"
+              />
             </div>
           </template>
           <template #footer>
-            <button
-              v-if="order?.status !== 'canceled' && order?.status !== 'done'"
-              class="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
-              @click="handleCancelOrder"
-            >
-              Отменить заказ
-            </button>
+            <pages-order-v-cancel-section
+              :loading="isLoading"
+              :status="order?.status"
+              :confirm="confirm"
+              @handle-yes="handleCancelOrder"
+              @handle-no="confirm = false"
+              @handle-cancel-order="confirm = true"
+            />
           </template>
         </common-v-summary>
       </div>
-
-      <div class="mt-4 bg-white p-4 rounded-lg shadow-sm">
-        <h3 class="text-lg font-semibold">
-          Товары: {{ order?.orderDetails.length }}
-        </h3>
-        <div class="flex space-x-4 mt-4 overflow-x-auto justify-center">
-          <pages-order-v-items-list :items="order?.orderDetails" />
-        </div>
-      </div>
+      <lazy-pages-order-v-items :order-details="order?.orderDetails" />
     </div>
   </div>
 </template>

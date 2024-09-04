@@ -25,6 +25,7 @@ export const useUserOrders = () => {
 
   const patchOrderStatus = async (orderId: number, orderStatus: string) => {
     try {
+      loading.value = true
       await $fetch('/api/orders/order', {
         method: 'PATCH',
         params: { id: orderId },
@@ -32,6 +33,8 @@ export const useUserOrders = () => {
       })
     } catch (e) {
       handleFetchError(e)
+    } finally {
+      loading.value = false
     }
   }
 

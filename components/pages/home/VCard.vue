@@ -39,7 +39,7 @@
         <span class="ml-1 text-gray-500"> • {{ product.count }} оценок </span>
       </div>
       <common-v-cart-manager
-        :isInCart="isInCart"
+        :is-in-cart="isInCart"
         :loading="loading"
         :quantity="quantity"
         @on-add-to-cart="handleAddToCart"
