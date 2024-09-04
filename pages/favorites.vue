@@ -12,7 +12,7 @@ const products = computed(() => favoriteStore.products)
         v-if="!products.length"
         title="Ваш список избранных товаров пуст"
         description="Добавьте товары в избранные, чтобы не потерять"
-        image="/_nuxt/assets/static/package_h.png"
+        image="/images/package_h.png"
         action="Перейти в каталог"
       />
       <div v-auto-animate v-else>

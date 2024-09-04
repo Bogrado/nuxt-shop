@@ -13,7 +13,7 @@ const totalItems = computed(() => cartStore.totalItems)
       v-if="!products.length"
       title="Ваша корзина пуста"
       description="Добавьте товары в корзину, чтобы начать покупки"
-      image="/_nuxt/assets/static/package-icon.png"
+      image="/images/package-icon.png"
       action="Перейти в каталог"
     />
     <div v-else v-auto-animate>

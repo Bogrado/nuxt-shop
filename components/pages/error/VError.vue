@@ -10,7 +10,7 @@ defineProps({
 <template>
   <div class="flex flex-col items-center justify-center h-screen text-center">
     <img
-      src="@/assets/static/404.png"
+      src="/public/images/404.png"
       alt="Empty Cart"
       class="mb-4 w-72 h-72 object-cover"
     />

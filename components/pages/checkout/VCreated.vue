@@ -1,11 +1,9 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="flex flex-col items-center justify-center h-screen text-center">
     <img
-      src="@/assets/static/product.png"
+      src="/images/product.png"
       alt="Empty Cart"
       class="mb-4 w-72 h-72 object-cover"
     />
@@ -23,6 +21,4 @@
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

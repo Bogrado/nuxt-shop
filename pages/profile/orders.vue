@@ -21,7 +21,7 @@ const orders = computed(() => (data.value as OrderData[]) || [])
       v-if="status === 'success' && !orders.length"
       title="Ваш список заказов пока пуст"
       description="Оформите заказ и он появится здесь"
-      image="/_nuxt/assets/static/file.png"
+      image="/images/file.png"
       action="За покупками"
     />
     <lazy-pages-error-v-error
