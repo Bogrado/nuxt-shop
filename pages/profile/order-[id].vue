@@ -1,15 +1,25 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 
+const { canceled } = useUserOrders()
+const modalStore = useModalStore()
 const { user } = useAuth()
 const route = useRoute()
 const orderId = route.params.id
 
-const { data, status } = await useFetch('/api/orders/orders', {
+const { data, status, refresh } = await useFetch('/api/orders/orders', {
   params: { user_id: user.value?.id, id: orderId },
 })
+
+const handleCancelOrder = async () => {
+  modalStore.openModal('cancelOrder', order.value?.id)
+  if (cancelOrder.value) {
+    await refresh()
+  }
+}
 const order = computed(() => data.value?.[0])
 const formattedDate = computed(() => formatDate(order.value?.created_at))
+const cancelOrder = computed(() => canceled.value)
 </script>
 
 <template>
@@ -50,7 +60,15 @@ const formattedDate = computed(() => formatDate(order.value?.created_at))
               </div>
             </div>
           </template>
-          <template #footer />
+          <template #footer>
+            <button
+              v-if="order?.status !== 'canceled' && order?.status !== 'done'"
+              class="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
+              @click="handleCancelOrder"
+            >
+              Отменить заказ
+            </button>
+          </template>
         </common-v-summary>
       </div>
 

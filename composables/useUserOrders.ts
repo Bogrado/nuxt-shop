@@ -4,6 +4,7 @@ import { denormalizeItems } from '~/utils/denormalizeItems'
 export const useUserOrders = () => {
   const loading = ref(false)
   const products = ref<Item[] | null>(null)
+  const canceled = ref(false)
 
   const loadOrderProducts = async (ids: number[]) => {
     loading.value = true
@@ -24,9 +25,26 @@ export const useUserOrders = () => {
     }
   }
 
+  const patchOrderStatus = async (orderId: number, orderStatus: string) => {
+    canceled.value = true
+    try {
+      await $fetch('/api/orders/order', {
+        method: 'PATCH',
+        params: { id: orderId },
+        body: { orderStatus },
+      })
+    } catch (e) {
+      handleFetchError(e)
+    } finally {
+      canceled.value = false
+    }
+  }
+
   return {
     products,
     loading,
+    canceled,
     loadOrderProducts,
+    patchOrderStatus,
   }
 }
