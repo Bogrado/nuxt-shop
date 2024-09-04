@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 
-const { canceled } = useUserOrders()
 const modalStore = useModalStore()
 const { user } = useAuth()
 const route = useRoute()
@@ -13,13 +12,12 @@ const { data, status, refresh } = await useFetch('/api/orders/orders', {
 
 const handleCancelOrder = async () => {
   modalStore.openModal('cancelOrder', order.value?.id)
-  if (cancelOrder.value) {
-    await refresh()
-  }
+  setTimeout(() => {
+    refresh()
+  }, 3500)
 }
 const order = computed(() => data.value?.[0])
 const formattedDate = computed(() => formatDate(order.value?.created_at))
-const cancelOrder = computed(() => canceled.value)
 </script>
 
 <template>
