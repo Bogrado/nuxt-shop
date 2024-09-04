@@ -14,7 +14,7 @@ const formattedDate = computed(() => formatDate(order.value?.created_at))
 
 <template>
   <div>
-    <nuxt-link to="/profile/orders" class="text-blue-500">
+    <nuxt-link to="/profile/orders" class="block text-blue-500 min-h-[3rem]">
       К списку заказов
     </nuxt-link>
     <div v-if="status === 'success' && order">

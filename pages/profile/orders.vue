@@ -6,6 +6,7 @@ const orders = computed(() => (data.value as OrderData[]) || [])
 </script>
 <template>
   <div v-auto-animate>
+    <div class="min-h-[3rem]" />
     <h2
       class="text-2xl text-white font-semibold mb-4 mt-4 p-4 bg-slate-800 rounded-lg"
     >

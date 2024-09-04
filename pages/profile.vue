@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const router = useRouter()
-
 definePageMeta({
   ssr: false,
 })
@@ -11,13 +9,6 @@ const handleLogout = async () => {
   await logout()
   navigateTo('/catalog')
 }
-
-// Проверяем маршрут и переходим к заказам, если маршрут основной
-// onMounted(() => {
-//   if (router.currentRoute.value.path === '/profile') {
-//     router.push('/profile/orders')
-//   }
-// })
 </script>
 
 <template>
@@ -32,7 +23,10 @@ const handleLogout = async () => {
           <!-- User Image -->
           <lazy-pages-profile-v-image />
           <!-- User Info -->
-          <lazy-pages-profile-v-info @handle-logout="handleLogout" />
+          <lazy-pages-profile-v-info
+            :user="user"
+            @handle-logout="handleLogout"
+          />
         </div>
 
         <!-- Секция для заказов -->

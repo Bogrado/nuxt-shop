@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import type { User } from '~/types'
+
+defineProps<{
+  user: User
+}>()
 defineEmits(['handleLogout'])
 </script>
 <template>
@@ -22,15 +27,17 @@ defineEmits(['handleLogout'])
       </button>
     </div>
     <div class="p-4">
-      <div class="mb-2">
-        <label class="block text-sm font-medium text-gray-700"
-          >Имя пользователя</label
-        >
-        <p class="text-lg">Иван Иванов</p>
-      </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700">Email</label>
-        <p class="text-lg">ivan@example.com</p>
+        <div class="mb-2">
+          <label class="block text-sm font-medium text-gray-700"
+            >Имя пользователя</label
+          >
+          <p class="text-base sm:text-lg break-words">{{ user.nickName }}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <p class="text-base sm:text-lg break-words">{{ user.email }}</p>
+        </div>
       </div>
     </div>
   </div>
