@@ -26,7 +26,7 @@ const handleLogout = async () => {
       <!-- Заголовок страницы -->
       <pages-v-page-header :title="`Профиль пользователя ${user.nickName}`" />
 
-      <div class="container mx-auto p-4 bg-gray-200 rounded-lg min-h-screen">
+      <div class="container mx-auto p-4 bg-gray-200 rounded-lg">
         <!-- Информация о пользователе -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <!-- User Image -->

@@ -13,8 +13,15 @@ const orders = computed(() => (data.value as OrderData[]) || [])
     </h2>
     <common-v-preloader v-if="status === 'pending'" />
     <lazy-pages-profile-v-orders-list
-      v-if="status === 'success'"
+      v-if="status === 'success' && orders"
       :orders="orders"
+    />
+    <lazy-common-v-empty
+      v-if="status === 'success' && !orders.length"
+      title="Ваш список заказов пока пуст"
+      description="Оформите заказ и он появится здесь"
+      image="/_nuxt/assets/static/file.png"
+      action="За покупками"
     />
     <lazy-pages-error-v-error
       v-if="error || status === 'error'"

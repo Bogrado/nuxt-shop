@@ -9,7 +9,13 @@ const totalItems = computed(() => cartStore.totalItems)
   <client-only>
     <!-- Заголовок страницы -->
     <pages-v-page-header title="Корзина" />
-    <pages-cart-v-empty v-if="!products.length" />
+    <lazy-common-v-empty
+      v-if="!products.length"
+      title="Ваша корзина пуста"
+      description="Добавьте товары в корзину, чтобы начать покупки"
+      image="/_nuxt/assets/static/package-icon.png"
+      action="Перейти в каталог"
+    />
     <div v-else v-auto-animate>
       <div
         class="max-w-screen-2xl mx-auto flex flex-col lg:flex-row lg:space-x-8"
