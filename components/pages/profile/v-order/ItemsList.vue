@@ -29,7 +29,7 @@ onMounted(() => loadOrderProducts(itemIds.value))
       :image="item.image"
       :loading="getLoading"
     />
-    <div v-if="items.length > 4" class="flex items-center text-gray-500">
+    <div v-if="items.length > 3" class="flex items-center text-gray-500">
       + ещё {{ remainingItemsCount }}
     </div>
   </div>

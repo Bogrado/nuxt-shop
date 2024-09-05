@@ -41,6 +41,7 @@ export const useOrderStore = defineStore('order', () => {
     () => authStore.getUser,
     newUser => {
       if (newUser) {
+        state.userId = newUser.id
         state.email = newUser.email
         state.firstName = newUser.firstName
         state.lastName = newUser.lastName
@@ -118,6 +119,7 @@ export const useOrderStore = defineStore('order', () => {
 
   const clearState = () => {
     state.status = 'created'
+    state.userId = <number | undefined>authStore.getUser?.id
     state.firstName = <string | undefined>authStore.getUser?.firstName || ''
     state.lastName = <string | undefined>authStore.getUser?.lastName || ''
     state.email = <string | undefined>authStore.getUser?.email || ''
