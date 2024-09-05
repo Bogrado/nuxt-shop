@@ -102,16 +102,17 @@ export const useOrderStore = defineStore('order', () => {
             apartmentNumber: state.apartmentNumber,
           },
         })
-        await cartStore.clearCart()
-        clearState()
-        setTimeout(() => {
-          isCreated.value = false
-        }, 3000)
       }
+      await cartStore.clearCart()
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       state.error = 'Ошибка при отправке заказа: ' + error.message
+    } finally {
+      clearState()
+      setTimeout(() => {
+        isCreated.value = false
+      }, 3000)
     }
   }
 
