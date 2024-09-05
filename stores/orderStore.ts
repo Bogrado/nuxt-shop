@@ -69,20 +69,6 @@ export const useOrderStore = defineStore('order', () => {
       state.error = 'Вы должны согласиться на обработку персональных данных.' // подстраховка на случай отключения дизейбла через f12
       return
     }
-    if (state.saveAddress) {
-      await patchUser(state.userId, {
-        firstName: state.firstName,
-        lastName: state.lastName,
-        address: {
-          country: state.country,
-          city: state.city,
-          postalCode: state.postalCode,
-          addressLine1: state.addressLine1,
-          houseNumber: state.houseNumber,
-          apartmentNumber: state.apartmentNumber,
-        },
-      })
-    }
     try {
       state.created_at = new Date().toISOString()
       const orderData = {
@@ -101,11 +87,27 @@ export const useOrderStore = defineStore('order', () => {
       state.error = ''
       isCreated.value = true
       console.log('Заказ успешно отправлен:', orderData)
-      await cartStore.clearCart()
-      clearState()
-      setTimeout(() => {
-        isCreated.value = false
-      }, 3000)
+      if (state.saveAddress) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        await patchUser(state.userId, {
+          firstName: state.firstName,
+          lastName: state.lastName,
+          address: {
+            country: state.country,
+            city: state.city,
+            postalCode: state.postalCode,
+            addressLine1: state.addressLine1,
+            houseNumber: state.houseNumber,
+            apartmentNumber: state.apartmentNumber,
+          },
+        })
+        await cartStore.clearCart()
+        clearState()
+        setTimeout(() => {
+          isCreated.value = false
+        }, 3000)
+      }
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error

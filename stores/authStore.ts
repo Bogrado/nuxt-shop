@@ -101,7 +101,8 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const removeSessionId = () => {
-    anonSessionId.value = ''
+    anonSessionId.value = null
+    localStorage.removeItem(config.public.anonName)
   }
 
   const getUser = computed(() => user.value)

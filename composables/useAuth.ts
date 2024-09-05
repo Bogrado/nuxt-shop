@@ -41,6 +41,7 @@ export const useAuth = () => {
         await loadUserCart()
         await loadUserFavorites()
       }
+      authStore.removeSessionId()
     } catch (e) {
       handleFetchError(e)
     } finally {
@@ -88,10 +89,7 @@ export const useAuth = () => {
     }
   }
 
-  const patchUser = async (
-    id: UnwrapRef<ComputedRef<number | undefined>>,
-    body: UserUpdateBody
-  ) => {
+  const patchUser = async (id: number, body: UserUpdateBody) => {
     setLoading(true)
     authStore.clearError()
     try {

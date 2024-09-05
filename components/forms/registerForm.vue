@@ -8,7 +8,7 @@ defineProps({
   },
 })
 
-const emit = defineEmits(['switchTo'])
+const emit = defineEmits(['switchTo', 'closeModal'])
 
 const { state, error, v$, handleRegister } = useRegisterForm()
 
@@ -21,6 +21,7 @@ const handleSubmit = async () => {
       firstName: '',
       lastName: '',
     })
+    if (!error.value) emit('closeModal')
   }
 }
 </script>

@@ -24,7 +24,8 @@ export const useRegisterForm = () => {
   const handleRegister = async (credentials: UserData) => {
     await register(credentials)
     if (!error.value) {
-      navigateTo('/auth_user/login')
+      await refreshNuxtData()
+      await navigateTo('/auth_user/login')
     }
   }
 
