@@ -16,6 +16,7 @@ const handleSave = async () => {
   await patchUser(props.user.id, {
     firstName: firstName.value,
     lastName: lastName.value,
+    address: null,
   })
 }
 const userFirstName = computed(() =>

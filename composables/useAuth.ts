@@ -1,4 +1,5 @@
 import type { Credentials, UserData, UserUpdateBody } from '~/types'
+import type { UnwrapRef } from 'vue'
 
 export const useAuth = () => {
   const authStore = useAuthStore()
@@ -87,7 +88,10 @@ export const useAuth = () => {
     }
   }
 
-  const patchUser = async (id: number, body: UserUpdateBody) => {
+  const patchUser = async (
+    id: UnwrapRef<ComputedRef<number | undefined>>,
+    body: UserUpdateBody
+  ) => {
     setLoading(true)
     authStore.clearError()
     try {

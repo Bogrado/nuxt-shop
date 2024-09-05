@@ -4,20 +4,25 @@ import { reactive, computed, watch, ref } from 'vue'
 export const useOrderStore = defineStore('order', () => {
   const authStore = useAuthStore()
   const cartStore = useCartStore()
+  const { patchUser } = useAuth()
 
   const state = reactive({
     // Нужно ли сокращать или ненужно? Вроде, всё важное
     status: 'created',
-    userId: computed(() => authStore.getUser?.id),
+    userId: <number | undefined>authStore.getUser?.id,
     firstName: <string | undefined>authStore.getUser?.firstName || '',
     lastName: <string | undefined>authStore.getUser?.lastName || '',
     email: <string | undefined>authStore.getUser?.email || '',
-    country: '',
-    city: '',
-    postalCode: '',
-    addressLine1: '',
-    houseNumber: '',
-    apartmentNumber: '',
+    country: <string | undefined>authStore.getUser?.address?.country || '',
+    city: <string | undefined>authStore.getUser?.address?.city || '',
+    postalCode:
+      <string | undefined>authStore.getUser?.address?.postalCode || '',
+    addressLine1:
+      <string | undefined>authStore.getUser?.address?.addressLine1 || '',
+    houseNumber:
+      <string | undefined>authStore.getUser?.address?.houseNumber || '',
+    apartmentNumber:
+      <string | undefined>authStore.getUser?.address?.apartmentNumber || '',
     saveAddress: false, // пока не используется, хорошо бы сделать сохранение адреса юзеру, и автозаполнять при монтировании страницы с формой
     agreeToTerms: false,
     created_at: '',
@@ -39,6 +44,12 @@ export const useOrderStore = defineStore('order', () => {
         state.email = newUser.email
         state.firstName = newUser.firstName
         state.lastName = newUser.lastName
+        state.country = <string>newUser.address?.country
+        state.city = <string>newUser.address?.city
+        state.postalCode = <string>newUser.address?.postalCode
+        state.addressLine1 = <string>newUser.address?.addressLine1
+        state.houseNumber = <string>newUser.address?.houseNumber
+        state.apartmentNumber = <string>newUser.address?.apartmentNumber
       }
     },
     { immediate: true, deep: true }
@@ -57,6 +68,20 @@ export const useOrderStore = defineStore('order', () => {
     if (!state.agreeToTerms) {
       state.error = 'Вы должны согласиться на обработку персональных данных.' // подстраховка на случай отключения дизейбла через f12
       return
+    }
+    if (state.saveAddress) {
+      await patchUser(state.userId, {
+        firstName: state.firstName,
+        lastName: state.lastName,
+        address: {
+          country: state.country,
+          city: state.city,
+          postalCode: state.postalCode,
+          addressLine1: state.addressLine1,
+          houseNumber: state.houseNumber,
+          apartmentNumber: state.apartmentNumber,
+        },
+      })
     }
     try {
       state.created_at = new Date().toISOString()

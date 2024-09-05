@@ -56,6 +56,7 @@ export interface User {
   email: string
   firstName: string
   lastName: string
+  address?: Address
 }
 
 export interface Credentials {
@@ -89,6 +90,16 @@ export interface OrderData {
 }
 
 export interface UserUpdateBody {
-  firstName: string
-  lastName: string
+  firstName: string | ''
+  lastName: string | ''
+  address: Address | null
+}
+
+export interface Address {
+  country: string
+  city: string
+  postalCode: string
+  addressLine1: string
+  houseNumber: string
+  apartmentNumber: string
 }

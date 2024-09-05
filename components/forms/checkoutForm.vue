@@ -161,7 +161,9 @@
             type="checkbox"
             class="form-checkbox bg-gray-700 text-blue-500 border-gray-600"
           />
-          <span class="ml-2 text-gray-700">Сохранить адрес</span>
+          <span class="ml-2 text-gray-700">
+            Сохранить адрес для следующей покупки
+          </span>
         </label>
       </div>
       <div>

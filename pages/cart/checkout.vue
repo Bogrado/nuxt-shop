@@ -1,5 +1,5 @@
 <template>
-  <div v-auto-animate>
+  <div v-if="orderStore.state.userId" v-auto-animate>
     <h1 class="text-3xl font-bold mb-4 text-center">Оформление заказа</h1>
     <pages-checkout-v-created v-if="createdSuccess" />
     <div

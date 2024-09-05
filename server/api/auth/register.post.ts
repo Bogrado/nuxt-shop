@@ -4,7 +4,7 @@ export default defineEventHandler(async event => {
   const body = await readBody(event)
   const config = useRuntimeConfig()
 
-  const { email, password, nickName } = body
+  const { email, password, nickName, firstName, lastName } = body
 
   try {
     const response = await $fetch(`${config.public.baseUrl}/register`, {
@@ -13,7 +13,15 @@ export default defineEventHandler(async event => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: { email, password, nickName, role: 'user' },
+      body: {
+        email,
+        password,
+        nickName,
+        role: 'user',
+        firstName,
+        lastName,
+        address: {},
+      },
     })
 
     return response
