@@ -2,6 +2,7 @@
 import { formsContainer } from '@/composables/forms/formsContainer'
 
 export const useModalStore = defineStore('modal', () => {
+  const { $disableScroll, $enableScroll } = useNuxtApp()
   const state = reactive({
     isOpen: false,
     modalKey: '',
@@ -36,6 +37,17 @@ export const useModalStore = defineStore('modal', () => {
     // @ts-expect-error
     return formsContainer[state.modalKey] || null
   })
+
+  watch(
+    () => state.isOpen,
+    newValue => {
+      if (newValue) {
+        $disableScroll()
+      } else {
+        $enableScroll()
+      }
+    }
+  )
 
   return {
     state,

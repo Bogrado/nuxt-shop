@@ -1,5 +1,4 @@
 import type { Credentials, UserData, UserUpdateBody } from '~/types'
-import type { UnwrapRef } from 'vue'
 
 export const useAuth = () => {
   const authStore = useAuthStore()
