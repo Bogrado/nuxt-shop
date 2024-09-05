@@ -115,15 +115,20 @@ export const useOrderStore = defineStore('order', () => {
 
   const clearState = () => {
     state.status = 'created'
-    state.firstName = ''
-    state.lastName = ''
+    state.firstName = <string | undefined>authStore.getUser?.firstName || ''
+    state.lastName = <string | undefined>authStore.getUser?.lastName || ''
     state.email = <string | undefined>authStore.getUser?.email || ''
-    state.country = ''
-    state.city = ''
-    state.postalCode = ''
-    state.addressLine1 = ''
-    state.houseNumber = ''
-    state.apartmentNumber = ''
+    state.country =
+      <string | undefined>authStore.getUser?.address?.country || ''
+    state.city = <string | undefined>authStore.getUser?.address?.city || ''
+    state.postalCode =
+      <string | undefined>authStore.getUser?.address?.postalCode || ''
+    state.addressLine1 =
+      <string | undefined>authStore.getUser?.address?.addressLine1 || ''
+    state.houseNumber =
+      <string | undefined>authStore.getUser?.address?.houseNumber || ''
+    state.apartmentNumber =
+      <string | undefined>authStore.getUser?.address?.apartmentNumber || ''
     state.saveAddress = false
     state.agreeToTerms = false
     state.created_at = ''
