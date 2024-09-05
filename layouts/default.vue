@@ -17,10 +17,13 @@
     <!-- Footer -->
     <layout-t-footer />
     <lazy-common-v-modal />
+    <SpeedInsights />
   </div>
 </template>
 
 <script setup>
+import { SpeedInsights } from '@vercel/speed-insights/nuxt'
+
 const isMenuOpen = ref(false)
 
 const toggleMenu = () => {
