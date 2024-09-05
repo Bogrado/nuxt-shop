@@ -1,4 +1,5 @@
 <template>
+  <SpeedInsights />
   <div v-auto-animate class="min-h-screen flex flex-col bg-gray-100">
     <!-- Header -->
     <layout-t-header @toggle-menu="toggleMenu" />
@@ -17,7 +18,6 @@
     <!-- Footer -->
     <layout-t-footer />
     <lazy-common-v-modal />
-    <SpeedInsights />
   </div>
 </template>
 
