@@ -1,4 +1,10 @@
-import type { ApiResponse, Credentials, User, UserData } from '~/types'
+import type {
+  ApiResponse,
+  Credentials,
+  User,
+  UserData,
+  UserUpdateBody,
+} from '~/types'
 
 export const useAuthStore = defineStore('auth', () => {
   const config = useRuntimeConfig()
@@ -66,6 +72,21 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const patchUser = async (id: number, body: UserUpdateBody) => {
+    try {
+      return <ApiResponse>await $fetch<ApiResponse>('/api/auth/user', {
+        method: 'PATCH',
+        params: { id },
+        body,
+      })
+    } catch (err: unknown) {
+      const e = err as {
+        data?: { message?: string }
+      }
+      error.value = e.data?.message || 'Registration failed'
+    }
+  }
+
   const initSessionId = () => {
     if (!anonSessionId.value && import.meta.client && !user?.value?.id) {
       const storedSessionId = localStorage.getItem(config.public.anonName)
@@ -98,6 +119,7 @@ export const useAuthStore = defineStore('auth', () => {
     clearError,
     initSessionId,
     removeSessionId,
+    patchUser,
     getUser,
     getAnonSessionId,
   }

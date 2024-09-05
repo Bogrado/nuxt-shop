@@ -18,6 +18,8 @@ const handleSubmit = async () => {
       nickName: state.nickName,
       email: state.email,
       password: state.password,
+      firstName: '',
+      lastName: '',
     })
   }
 }

@@ -54,6 +54,8 @@ export interface User {
   role: string
   nickName: string
   email: string
+  firstName: string
+  lastName: string
 }
 
 export interface Credentials {
@@ -66,6 +68,8 @@ export interface UserData {
   password: string
   nickName: string
   email: string
+  firstName: string
+  lastName: string
 }
 
 export interface OrderDetails {
@@ -82,4 +86,9 @@ export interface OrderData {
   address: string
   fullName: string
   id: number
+}
+
+export interface UserUpdateBody {
+  firstName: string
+  lastName: string
 }

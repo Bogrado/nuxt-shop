@@ -9,8 +9,8 @@ export const useOrderStore = defineStore('order', () => {
     // Нужно ли сокращать или ненужно? Вроде, всё важное
     status: 'created',
     userId: computed(() => authStore.getUser?.id),
-    firstName: '',
-    lastName: '',
+    firstName: <string | undefined>authStore.getUser?.firstName || '',
+    lastName: <string | undefined>authStore.getUser?.lastName || '',
     email: <string | undefined>authStore.getUser?.email || '',
     country: '',
     city: '',
@@ -33,12 +33,16 @@ export const useOrderStore = defineStore('order', () => {
   )
 
   watch(
-    () => authStore.getUser?.email,
-    newEmail => {
-      state.email = newEmail
+    () => authStore.getUser,
+    newUser => {
+      if (newUser) {
+        state.email = newUser.email
+        state.firstName = newUser.firstName
+        state.lastName = newUser.lastName
+      }
     },
-    { immediate: true }
-  ) // на всякий случай, для смены пользователя
+    { immediate: true, deep: true }
+  )
 
   watch(
     () => cartStore.itemsWithIds,
@@ -78,6 +82,8 @@ export const useOrderStore = defineStore('order', () => {
         isCreated.value = false
       }, 3000)
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       state.error = 'Ошибка при отправке заказа: ' + error.message
     }
   }

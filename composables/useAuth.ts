@@ -1,4 +1,4 @@
-import type { Credentials, UserData } from '~/types'
+import type { Credentials, UserData, UserUpdateBody } from '~/types'
 
 export const useAuth = () => {
   const authStore = useAuthStore()
@@ -87,11 +87,36 @@ export const useAuth = () => {
     }
   }
 
+  const patchUser = async (id: number, body: UserUpdateBody) => {
+    setLoading(true)
+    authStore.clearError()
+    try {
+      await authStore.patchUser(id, body)
+      const userData = await authStore.fetchUser()
+      if (userData) {
+        authStore.setUser(userData)
+      }
+    } catch (e) {
+      handleFetchError(e)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const clearError = () => authStore.clearError()
 
   const user = computed(() => authStore.getUser)
   const error = computed(() => authStore.error)
   const sessionId = computed(() => authStore.getAnonSessionId)
 
-  return { user, register, login, logout, fetchUser, error, clearError }
+  return {
+    user,
+    register,
+    login,
+    logout,
+    fetchUser,
+    patchUser,
+    error,
+    clearError,
+  }
 }
